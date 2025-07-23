@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import StackNavigator from './src/navigation/StackNavigator'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthNavigator from './src/navigation/AuthNavigator'
+import AuthLoadingScreen from './src/screens/AuthLoadingScreen';
 
 
 export default function App(){

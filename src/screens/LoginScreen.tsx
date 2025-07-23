@@ -6,37 +6,64 @@ export default function LoginScreen({navigation}){
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin= async()=>{
-      console.log('Logging in with:', { username, password });
 
-   // try{
+ 
+
+  const handleLogin= async()=>{
+    if (!username || !password) {
+      Alert.alert('Please enter both fields username and password');
+      return;
+    }
+      console.log('Logging in with:', { username, password });
+      
+
+   try{
      const response = await fetch ('https://kbrtransways.com/testing/tms/tms_api2/index.php/login',{
       method:'POST',
       headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username:"super_admin", 
-          password:"Ajay123@#$", 
-          deviceToken:"123", 
-          app_version:"2"})
+          username: username.trim(),
+        password: password.trim(),
+          deviceToken:1212, 
+          app_version:1 
+        })
      })
     const json = await response.json()
     console.log('API response:', json);
-    }
+    console.log("Full API Data:", JSON.stringify(json.data, null, 2));
+    console.log("Login status from API:", json.status);
+
+
+    
+    if (json.status == 1 || json.status === '1') {
+        const user = json.data[0];
+        await AsyncStorage.setItem('userData', JSON.stringify(user));
+        console.log("✅ Saved to AsyncStorage:", user);
+
+
+      // await AsyncStorage.setItem('userCreds', JSON.stringify({
+      //   username: username.trim(),
+      //   password: password.trim(),
+      // }));
+            console.log('✅ Credentials saved');
+
+        await AsyncStorage.setItem('userId', user.user_id);
+
+              navigation.replace('HomeScreen');
+
+    } else {
       
-  //   if (json.token){
-  //      await AsyncStorage.setItem ('userToken', json.token)
-  //             navigation.replace('HomeScreen');
-
-  //   } else {
-  //     Alert.alert('login Failed', json.message || 'invalid credentials')
-  //   }
-  //   }catch (error){
-  //   Alert.alert('Error',' something went wrong')
-  //  }
-  // }
-
+      Alert.alert('login Failed', json.message || 'invalid credentials')
+      }
+  }catch (error){
+        console.log(error);
+setPassword
+    Alert.alert('Error',' something went wrong')
+   }
+  
+  }
 
 //   const handleLogout = async () => {
 //   await AsyncStorage.removeItem('userToken');
@@ -58,7 +85,7 @@ export default function LoginScreen({navigation}){
       placeholder="Password"
      value={password}
      onChangeText={setPassword}
-       secureTextEntry={true}
+      // secureTextEntry={true}
 
       />
       <TouchableOpacity 
