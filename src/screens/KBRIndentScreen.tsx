@@ -85,8 +85,7 @@ const [searchInput, setSearchInput] = useState('');
       <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Customer Name:<Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}> {item.supplier_name}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Origin: <Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}>{item.from_location}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Destination: <Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}>{item.to_location}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Indent Start Date: <Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}>{item.indent_start_date}</Text> </Text>
-      
+      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Loading Date: <Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}>{item.loading_date}</Text> </Text>
        <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{ backgroundColor: 'navy',borderRadius:8,paddingVertical:8, paddingHorizontal:5, alignItems:'center', alignSelf:'center', marginTop:hp('2%')}}>
           <Text style={{color: 'white',fontWeight: 'bold',}}>{item.showDetails ? 'View less' : 'View more details'}</Text>
         </TouchableOpacity>
@@ -95,7 +94,7 @@ const [searchInput, setSearchInput] = useState('');
         <View style={{marginTop: 10,}}>
     
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Indent Closing Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}> {item.indent_end_date}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Loading Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.loading_date}</Text> </Text>
+      <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Indent Start Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.indent_start_date}</Text> </Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.vehicle_type}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Costing Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.costing_type}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle/Tonn Count: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.number_of_vehicles}</Text> </Text>
@@ -107,15 +106,12 @@ const [searchInput, setSearchInput] = useState('');
   );  
     if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
   return (
-    <View style={{flex:1, marginTop: hp('2%'),marginLeft:wp('3%'), }}>
-      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-     <TouchableOpacity style={{backgroundColor:'navy', padding:8, borderRadius:8,}}>
-        <Text style={{color:'white', alignSelf:'center', textAlign:'center',fontWeight:'500', fontSize:moderateScale(16), alignItems:'center', marginLeft:wp('5%'), marginRight:hp('5%')}}>KBR Indent</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={{backgroundColor:'navy', padding:8, borderRadius:8,marginRight:hp('2%')}}>
+    <View style={{flex:1, marginTop: hp('0.5%'),marginLeft:wp('3%'), }}>
+      {/* <View style={{flexDirection:'row',justifyContent:'space-between'}}> */}
+      {/* <TouchableOpacity style={{backgroundColor:'navy', padding:8, borderRadius:8,marginRight:hp('2%')}}>
         <Text  style={{color:'white', alignSelf:'center', textAlign:'center', fontWeight:'500', fontSize:moderateScale(16), alignItems:'center', marginLeft:wp('2%'), marginRight:hp('2%')}}>Create New </Text>
-      </TouchableOpacity>
-      </View>
+      </TouchableOpacity> */}
+      {/* </View> */}
   <View style={{marginHorizontal:8}}>
     <View style={{flexDirection:'row',marginTop: hp('0.8%')}}>
       
@@ -128,7 +124,7 @@ const [searchInput, setSearchInput] = useState('');
       setSelectedIntentNumber(null);
       setSelectedCustomerName(null);
       setSearchInput('');
-      setFilteredData(data); // Reset to full data on filter change
+      setFilteredData(data); 
     }}
   >
     <Picker.Item label="Select" value="" />
@@ -136,65 +132,14 @@ const [searchInput, setSearchInput] = useState('');
     <Picker.Item label="Customer Name" value="Customer Name" />
   </Picker>
 </View>
-
-        
-      {/* <Picker
-        selectedValue={selectedIntentNumber}
-        onValueChange={(itemValue) => setSelectedIntentNumber(itemValue)}
-        style={{backgroundColor: '#fff',borderRadius: 8,marginBottom: 10,}}
-      >
-        <Picker.Item label=" Intent Number" value="" />
-        {[...new Set(filteredData.map(item => item.indent_number))].map(indent => (
-          <Picker.Item label={indent} value={indent} key={indent} />
-        ))}
-      </Picker>
-
-      <Picker
-        selectedValue={selectedCustomerName}
-        onValueChange={(itemValue) => setSelectedCustomerName(itemValue)}
-        style={{backgroundColor: '#fff',borderRadius: 8,marginBottom: 10,}}
-      >
-        <Picker.Item label="Select Customer Name" value="" />
-         {[...new Set(filteredData.map(item => item.user_id))].map(customer => (
-          <Picker.Item label={`Customer ${customer}`} value={customer} key={customer} />
-        ))}
-      </Picker> */}
-       {/* {filterType === 'Indent Number' && (
-  <Picker
-    selectedValue={selectedIntentNumber}
-    onValueChange={(itemValue) => setSelectedIntentNumber(itemValue)}
-    style={{ backgroundColor: '#fff', borderRadius: 8, marginBottom: 10 }}
-  >
-    <Picker.Item label="Select Indent Number" value="" />
-    {[...new Set(data.map(item => item.indent_number))].map(indent => (
-      <Picker.Item label={indent} value={indent} key={indent} />
-    ))}
-  </Picker>
-)} */}
-
-{/* {filterType === 'Customer Name' && (
-  <Picker
-    selectedValue={selectedCustomerName}
-    onValueChange={(itemValue) => setSelectedCustomerName(itemValue)}
-    style={{ backgroundColor: '#fff', borderRadius: 8, marginBottom: 10 }}
-  >
-    <Picker.Item label="Select Customer Name" value="" />
-    {[...new Set(data.map(item => item.supplier_name))].map(customer => (
-      <Picker.Item label={customer} value={customer} key={customer} />
-    ))}
-  </Picker>
-)} */}
-
         <TextInput
           style={{ borderWidth: 1, marginRight: wp('2%'), borderColor: '#ccc', width: 150,backgroundColor: '#fff',borderRadius: 6, marginVertical: 14, height: 53, paddingLeft: 10,fontSize:12 }}
-          // placeholder='Please Enter'
           placeholder={`Enter ${filterType}`}
           placeholderTextColor={'grey'}
            value={searchInput}
   onChangeText={setSearchInput}
         />
       <View style={{flex:0.1}}> 
-        {/* KBR-IND-00001 */}
             <TouchableOpacity 
               onPress={() => {
     if (!filterType) {
@@ -233,7 +178,7 @@ const [searchInput, setSearchInput] = useState('');
 
     setFilteredData(filtered);
   }}
-            style={{ marginTop: hp('2%'),height: 42, width: 42, borderRadius: 4, justifyContent: 'center', alignItems: 'center', backgroundColor: 'navy'}}>
+            style={{ marginTop: hp('2%'),height: 45, width: 45, borderRadius: 4, justifyContent: 'center', alignItems: 'center', backgroundColor: 'navy'}}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>🔍</Text>
             </TouchableOpacity>
       </View>
