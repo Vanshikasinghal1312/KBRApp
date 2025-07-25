@@ -239,14 +239,14 @@ const [targetRate, setTargetRate] = useState('');
           style={{ height: 50,width: '100%',}}
         >
           <Picker.Item label="Select Freight Type" value="" />
-          <Picker.Item label="Per Vehicle" value="per_vehicle" />
-          <Picker.Item label="Per Ton" value="per_ton" />
+          <Picker.Item label="Per Vehicle" value="1" />
+          <Picker.Item label="Per Ton" value="2" />
         </Picker>
       </View>
       {freightType ? (
         <Text style={{marginTop: 10,fontSize: 16,
 color: 'green',}}>
-          Selected: {freightType === 'per_vehicle' ? 'Per Vehicle' : 'Per Ton'}
+          Selected: {freightType === '1' ? 'Per Vehicle' : 'Per Ton'}
         </Text>
       ) : null}
 
@@ -295,14 +295,14 @@ color: 'green',}}>
           style={{ height: 50,width: '100%',}}
         >
           <Picker.Item label="Select" value="" />
-          <Picker.Item label="Disclosed" value="Disclosed" />
-          <Picker.Item label="Not Disclosed" value="Not Disclosed" />
+          <Picker.Item label="Disclosed" value="0" />
+          <Picker.Item label="Not Disclosed" value="1" />
         </Picker>
       </View>
       {disclosureStatus ? (
         <Text style={{marginTop: 10,fontSize: 16,
 color: 'green',}}>
-          Selected: {disclosureStatus === 'disclosed' ? 'Disclosed' : 'Not Disclosed'}
+          Selected: {disclosureStatus === '0' ? 'Disclosed' : 'Not Disclosed'}
         </Text>
       ) : null}
          
