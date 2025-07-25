@@ -10,7 +10,7 @@ export default function AuthLoadingScreen({ navigation }) {
         console.log("✅ USER DATA FOUND:", userData);
 
         if (userData !== null) {
-          navigation.replace('HomeScreen');
+          navigation.replace('MainApp');
         } else {
           navigation.replace('LoginScreen');
         }

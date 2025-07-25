@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useEffect, useState , useLayoutEffect} from 'react';
+import {View,Text,TouchableOpacity,StyleSheet,ScrollView,ActivityIndicator, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Dimensions } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -74,6 +72,9 @@ export default function HomeScreen({ navigation }) {
       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={()=>navigation.navigate('KBRIndentScreen')} style={styles.logoutButton}>
+        <Text style={styles.logoutText}>Next</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
+    marginTop:100,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'navy',
@@ -117,6 +119,7 @@ const styles = StyleSheet.create({
   logoutButton: {
     backgroundColor: 'navy',
     padding: 14,
+    marginHorizontal:90,
     borderRadius: 10,
     alignItems: 'center',
   },
