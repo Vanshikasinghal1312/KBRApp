@@ -143,7 +143,7 @@ const [searchInput, setSearchInput] = useState('');
             <TouchableOpacity 
               onPress={() => {
     if (!filterType) {
-     Alert.alert('Please select a filter type');
+     Alert.alert('Please select type');
       return;
     }
 

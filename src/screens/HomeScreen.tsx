@@ -1,5 +1,5 @@
 import React, { useEffect, useState , useLayoutEffect} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,ScrollView,ActivityIndicator, Button} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,ScrollView,ActivityIndicator, ImageBackground} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dimensions } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -9,6 +9,21 @@ const { width, height } = Dimensions.get('window');
 export default function HomeScreen({ navigation }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+
+  useLayoutEffect(() => {
+  navigation.setOptions({
+    headerRight: () => (
+      <TouchableOpacity onPress={handleLogout} style={{  marginRight:15,  backgroundColor: 'navy',
+    padding:12,
+    marginHorizontal:90,
+    borderRadius:100, 
+    alignItems: 'center', }}>
+        <Text style={{ color: 'white', fontSize: 12, fontWeight:'800'}}>Logout</Text>
+      </TouchableOpacity>
+    ),
+  });
+}, [navigation]);
 
 
   useEffect(() => {
@@ -47,8 +62,15 @@ export default function HomeScreen({ navigation }) {
   if (!userData) return null;
 
   return (
+    <ImageBackground 
+    style={{  flex:1,
+    }}
+    source={require('../assets/image/truck2.png')}
+    resizeMode='cover'>
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Welcome, {userData.firstname} 👋</Text>
+      <Text style={{ fontSize:moderateScale(30),marginTop:60,fontWeight: 'bold',color: 'navy',marginLeft:wp('30%'),marginRight:wp('1%')}}>Welcome Back! </Text>
+
+        <Text style={{ fontSize:moderateScale(28),fontWeight: 'bold',color: 'navy',marginLeft:wp('40%'),marginRight:wp('1%')}}>{userData.firstname}👋</Text>
 
       {/* <View style={styles.card}>
         <Text style={styles.label}>Username:</Text>
@@ -69,13 +91,15 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.value}>{userData.company_name}</Text>
       </View> */}
 
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+      {/* <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
         <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={()=>navigation.navigate('KBRIndentScreen')} style={styles.logoutButton}>
+      </TouchableOpacity> */}
+      {/* <TouchableOpacity onPress={()=>navigation.navigate('KBRIndentScreen')} style={styles.logoutButton}>
         <Text style={styles.logoutText}>Next</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </ScrollView>
+    </ImageBackground>
+
   );
 }
 
@@ -87,17 +111,9 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 20,
-    backgroundColor: '#F9FAFB',
     flexGrow: 1,
   },
-  title: {
-    fontSize: 26,
-    marginTop:100,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'navy',
-    marginBottom: 30,
-  },
+  
   card: {
     backgroundColor: '#ffffff',
     padding: 20,
