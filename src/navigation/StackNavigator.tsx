@@ -17,6 +17,7 @@ export default function StackNavigator(){
         <Stack.Screen name='LoginScreen' component={LoginScreen}/>
         <Stack.Screen name="MainApp" component={DrawerNavigator} />
         <Stack.Screen name="CreateNewIndent" component={CreateNewIndent} />
+        
 
 
         {/* <Stack.Screen name='HomeScreen' component={HomeScreen}/>

@@ -7,9 +7,13 @@ import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function CreateNewIndent(){
+  const navigation = useNavigation();
+
 const [freightType, setFreightType] = useState('');
 const [disclosureStatus, setDisclosureStatus] = useState('');
 const [customers, setCustomers] = useState([]);
@@ -17,19 +21,14 @@ const [selectedCustomer, setSelectedCustomer] = useState('');
 const [loading, setLoading] = useState(true);
 const [vehicletypewithcapacity, setvehicletypewithcapacity] = useState('')
 const [Vehicletype, setVehicletype] = useState([]);
-
 const [IndentStartDate, setIndentStartDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-
+const [open, setOpen] = useState(false);
 const [closingDate, setClosingDate] = useState(new Date());
-  const [openclose, setOpenclose] = useState(false);
-
+const [openclose, setOpenclose] = useState(false);
 const [loadingDate, setLoadingDate] = useState(new Date());
-  const [openloading, setOpenloading] = useState(false);
-
+const [openloading, setOpenloading] = useState(false);
 const [deliveryDate, setDeliveryDate] = useState(new Date());
-  const [opendelivery, setOpendelivery] = useState(false);
-
+const [opendelivery, setOpendelivery] = useState(false);
 const [origin, setOrigin] = useState('');
 const [destination, setDestination] = useState('');
 const [numVehicles, setNumVehicles] = useState('');
@@ -40,48 +39,50 @@ const [targetRate, setTargetRate] = useState('');
 const [tonnageCount, setTonnageCount] = useState('');
 const [perVehicleRate, setPerVehicleRate] = useState('');
 const [perTonRate, setPerTonRate] = useState('');
+const [userId, setUserId] = useState('');
 
+useEffect(() => {
+   const fetchUserId = async () => {
+    const userData = await AsyncStorage.getItem('userData');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      setUserId(parsed.id); // make sure userId is in state
+    }
+  };
+  fetchUserId();
+}, []);
 
-
-
-  useEffect(() => {
+useEffect(() => {
   if (advance !== '' && totalAmount !== '') {
     const percentage = parseFloat(advance);
     const total = parseFloat(totalAmount);
-
-    if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+  if (isNaN(percentage) || percentage < 0 || percentage > 100) {
       Alert.alert('Invalid Advance %', 'Please enter a valid percentage between 0 and 100.');
       setAdvanceAmount('');
       return;
-    }
-
-    const calculatedAdvanceAmount = (percentage / 100) * total;
+}
+const calculatedAdvanceAmount = (percentage / 100) * total;
     setAdvanceAmount(calculatedAdvanceAmount.toFixed(2).toString());
   } else {
     setAdvanceAmount('');
   }
 }, [advance, totalAmount]);
 
-
-   
-
-   useEffect(() => {
+useEffect(() => {
   if (freightType === '1') {
-    // Per Vehicle calculation
     const total = parseFloat(numVehicles || 0) * parseFloat(perVehicleRate || 0);
     setTotalAmount(total.toString());
   } else if (freightType === '2') {
-    // Per Ton calculation
     const total = parseFloat(tonnageCount || 0) * parseFloat(perTonRate || 0);
     setTotalAmount(total.toString());
   }
 }, [freightType, numVehicles, perVehicleRate, tonnageCount, perTonRate]);
 
-
   const API_URL_ForCustomerName = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/getSuppliers';
   const API_URL_ForVehicletypeCapacity = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/getVehicleType';
+  const POST_API_ADDINDENT = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/createindent'
 
-    useEffect(() => {
+useEffect(() => {
     axios.get(API_URL_ForCustomerName, {
   headers: {
     Authorization: `Bearer 4f9e8d81c7b4a9fdf6b3e1c8930e2a171eb3f2e6bd8d59ef821a77c3a0f4d6e8`,
@@ -91,16 +92,13 @@ const [perTonRate, setPerTonRate] = useState('');
 
         setCustomers(response.data.data); 
         setLoading(false);
-      })
+    })
       .catch(error => {
       console.error('Failed to fetch customers:', error.response?.data || error.message);
         setLoading(false);
       });
   }, []);
-  
-
 //const API_URL_ForVehicletypeCapacity = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/getVehicleType';
-
     useEffect(() => {
     axios.get(API_URL_ForVehicletypeCapacity, {
   headers: {
@@ -117,22 +115,24 @@ const [perTonRate, setPerTonRate] = useState('');
         setLoading(false);
       });
   }, []);
-
- const POST_API_ADDINDENT = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/createindent'
-
+//  const POST_API_ADDINDENT = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/createindent'
  const handleSubmit = () => {
     if (
     !selectedCustomer ||
     !origin ||
     !destination ||
     !vehicletypewithcapacity ||
-    !freightType ||
-    !numVehicles ||
+    !freightType || 
     !totalAmount ||
     !advance ||
     !advanceAmount ||
     !disclosureStatus ||
-    !targetRate
+    !targetRate||
+    !IndentStartDate ||
+    !closingDate||
+    !loadingDate ||
+    !deliveryDate||
+    !userId
   ) {
     Alert.alert('Validation Error', 'Please fill all required fields.');
     return;
@@ -140,26 +140,26 @@ const [perTonRate, setPerTonRate] = useState('');
   const payload = {
     customer_name: selectedCustomer,
     indent_start_date: moment(IndentStartDate).format('DD-MM-YYYY'), 
-    indent_closing_date: moment(closingDate).format('DD-MM-YYYY'),
+    indent_last_date: moment(closingDate).format('DD-MM-YYYY'),
     loading_date: moment(loadingDate).format('DD-MM-YYYY'),
     expected_delivery_date: moment(deliveryDate).format('DD-MM-YYYY'),
     origin: origin,
     destination: destination,
     vehicle_type: vehicletypewithcapacity,
     freight_type: freightType,
-    number_of_vehicles: freightType === '1' ? numVehicles : '',
+    vehicle_count: freightType === '1' ? numVehicles : '0',
     tonnage: freightType === '2' ? tonnageCount : '',
     per_vehicle_rate: freightType === '1' ? perVehicleRate : '',
     per_ton_rate: freightType === '2' ? perTonRate : '',
     total_indent_amount: totalAmount,
-    advance: advance,
+    advance_percent: advance,
     advance_amount: advanceAmount,
     is_disclosed: disclosureStatus,
     target_rate: targetRate,
+    user_id: userId
   };
-    console.log('Payload being sent:', payload); // ✅ Log payload here
-
-
+    console.log('Payload being sent:', payload); 
+ 
   axios.post(POST_API_ADDINDENT, payload, {
     headers: {
       Authorization: `Bearer 4f9e8d81c7b4a9fdf6b3e1c8930e2a171eb3f2e6bd8d59ef821a77c3a0f4d6e8`,
@@ -168,17 +168,19 @@ const [perTonRate, setPerTonRate] = useState('');
   })
   .then(response => {
     console.log('Indent created successfully:', response.data);
-    Alert.alert('Indent created successfully!');
-    // Clear the form here if needed
+    Alert.alert('Success', 'Indent created successfully!',[
+      {
+      text: 'OK',
+      onPress: () => navigation.replace('MainApp', { screen: 'KBRIndentScreen' }),
+    }
+    ]);
   })
   .catch(error => {
     console.error('Error creating indent:', error.response?.data || error.message);
     Alert.alert('Failed to create indent.');
   });
 };
-
-
-    return(
+  return(
        <SafeAreaView>
       <ScrollView showsVerticalScrollIndicator={false} style={{ marginHorizontal: 20, marginTop:10 }}>
         <View style={{ backgroundColor: 'darkblue', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 6, marginBottom: 20 }}>
@@ -209,91 +211,74 @@ const [perTonRate, setPerTonRate] = useState('');
 
       {selectedCustomer ? (
         <Text style={{marginTop: 10,fontSize: 15,color: 'green',}}>Selected: {selectedCustomer}</Text>
-      ) : null}
-
-      
+      ) : null}     
 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
   <View style={{ width: '48%' }}>
-
-          <Text style={{ fontWeight: '700', fontSize: 16, marginTop:12}}>Indent Start Date<Text style={{ color: 'red' }}>*</Text></Text>  
-            <TouchableOpacity
-                  onPress={() => setOpen(true)}
-                  style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}
-                 >
-                  <Text>{moment(IndentStartDate).format('DD-MM-YYYY')}</Text>
-            </TouchableOpacity>
-            </View>
-            <DatePicker
-                  modal
-                  open={open}
-                  date={IndentStartDate}
-                  mode="date"
-                  onConfirm={(selectedDate) => {
-                    setOpen(false);
-                    setIndentStartDate(selectedDate);
-                  }}
-                  onCancel={() => {setOpen(false)}}
-                />
-           <View style={{ width: '48%' }}>
-    
-          <Text style={{ fontWeight: '700', fontSize: 16,marginTop:12 }}>Indent Closing Date <Text style={{ color: 'red' }}>*</Text></Text>
-           <TouchableOpacity
-                  onPress={() => setOpenclose(true)}
-                  style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}
-                 >
-                  <Text>{moment(closingDate).format('DD-MM-YYYY')}</Text>
-            </TouchableOpacity>
-             </View>
+    <Text style={{ fontWeight: '700', fontSize: 16, marginTop:12}}>Indent Start Date<Text style={{ color: 'red' }}>*</Text></Text>  
+      <TouchableOpacity onPress={() => setOpen(true)}
+        style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+          <Text>{moment(IndentStartDate).format('DD-MM-YYYY')}</Text>
+      </TouchableOpacity>
 </View>
-            <DatePicker
-                  modal
-                  open={openclose}
-                  date={closingDate}
-                  mode="date"
-                  onConfirm={(selectedDate) => {
-                    setOpenclose(false);
-                    setClosingDate(selectedDate);
-                  }}
-                  onCancel={() => {setOpenclose(false)}}
-                />
-        
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+  <DatePicker
+    modal
+    open={open}
+    date={IndentStartDate}
+    mode="date"
+    onConfirm={(selectedDate) => {
+    setOpen(false);
+    setIndentStartDate(selectedDate);
+    }}
+    onCancel={() => {setOpen(false)}} />
+ <View style={{ width: '48%' }}>
+  <Text style={{ fontWeight: '700', fontSize: 16,marginTop:12 }}>Indent Closing Date <Text style={{ color: 'red' }}>*</Text></Text>
+  <TouchableOpacity onPress={() => setOpenclose(true)}
+  style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+  <Text>{moment(closingDate).format('DD-MM-YYYY')}</Text>
+  </TouchableOpacity>
+  </View>
+</View>
+  <DatePicker
+   modal
+   open={openclose}
+   date={closingDate}
+   mode="date"
+   onConfirm={(selectedDate) => {
+   setOpenclose(false);
+   setClosingDate(selectedDate);
+   }}
+   onCancel={() => {setOpenclose(false)}}/>
+<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
   <View style={{ width: '46%' }}>
-          <Text style={{ fontWeight: '700', fontSize: 16 }}>Loading Date <Text style={{ color: 'red' }}>*</Text></Text>
-          <TouchableOpacity
-                  onPress={() => setOpenloading(true)}
-                  style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}
-                 >
-                  <Text>{moment(loadingDate).format('DD-MM-YYYY')}</Text>
-            </TouchableOpacity>
-            </View>
-            <DatePicker
-                  modal
-                  open={openloading}
-                  date={loadingDate}
-                  mode="date"
-                  onConfirm={(selectedDate) => {
-                    setOpenloading(false);
-                   setLoadingDate(selectedDate);
-                  }}
-                  onCancel={() => {setOpenloading(false)}}
-                />
-        
+  <Text style={{ fontWeight: '700', fontSize: 16 }}>Loading Date <Text style={{ color: 'red' }}>*</Text></Text>
+    <TouchableOpacity onPress={() => setOpenloading(true)}
+      style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+        <Text>{moment(loadingDate).format('DD-MM-YYYY')}</Text>
+      </TouchableOpacity>
+    </View>
+  <DatePicker
+    modal
+    open={openloading}
+    date={loadingDate}
+    mode="date"
+    onConfirm={(selectedDate) => {
+    setOpenloading(false);
+    setLoadingDate(selectedDate);
+    }}
+    onCancel={() => {setOpenloading(false)}}/>      
  <View style={{ width: '52%' }}>
-          <Text style={{ fontWeight: '700', fontSize: 16 }}>Expected Delivery Date <Text style={{ color: 'red' }}>*</Text></Text>
-          <TouchableOpacity
-                  onPress={() => setOpendelivery(true)}
-                  style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}
-                 >
-                  <Text>{moment(deliveryDate).format('DD-MM-YYYY')}</Text>
-            </TouchableOpacity>
-                        </View>
+  <Text style={{ fontWeight: '700', fontSize: 16 }}>Expected Delivery Date <Text style={{ color: 'red' }}>*</Text></Text>
+  <TouchableOpacity onPress={() => setOpendelivery(true)}
+    style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+    <Text>{moment(deliveryDate).format('DD-MM-YYYY')}</Text>
+  </TouchableOpacity>
 </View>
-            <DatePicker
-                  modal
-                  open={opendelivery}
-                  date={deliveryDate}
-                  mode="date"
+</View>
+ <DatePicker
+  modal
+  open={opendelivery}
+  date={deliveryDate}
+  mode="date"
                   onConfirm={(selectedDate) => {
                     setOpendelivery(false);
                     setDeliveryDate(selectedDate);
