@@ -422,7 +422,14 @@ color: 'green', marginBottom:20}}>
       style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
       placeholder='Enter number of vehicles'
       value={numVehicles}
-      onChangeText={setNumVehicles}
+      onChangeText={(text) => {
+    if (parseFloat(text) < 0) {
+      Alert.alert('Number of vehicles must be 0 or more');
+      return;
+    }
+    setNumVehicles(text);
+  }}
+  keyboardType="numeric"
     />
 
     <Text style={{ fontWeight: '700', fontSize: 16 }}>Per Vehicle Rate (customer)<Text style={{ color: 'red' }}>*</Text></Text>
@@ -430,7 +437,15 @@ color: 'green', marginBottom:20}}>
       style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
       placeholder='Enter per vehicle rate'
       value={perVehicleRate}
-      onChangeText={setPerVehicleRate}
+      onChangeText={(text) => {
+    if (parseFloat(text) < 0) {
+      Alert.alert('Rate should be 0 or more');
+      return;
+    }
+    setPerVehicleRate(text);
+  }}
+     keyboardType="numeric"
+      
     />
   </>
 )}
@@ -442,7 +457,14 @@ color: 'green', marginBottom:20}}>
       style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
       placeholder='Enter total tonnage'
       value={tonnageCount}
-      onChangeText={setTonnageCount}
+      onChangeText={(text) => {
+    if (parseFloat(text) < 0) {
+      Alert.alert('Tonnage must be 0 or more');
+      return;
+    }
+    setTonnageCount(text);
+  }}
+   
     />
 
     <Text style={{ fontWeight: '700', fontSize: 16 }}>Per Ton Rate<Text style={{ color: 'red' }}>*</Text></Text>
@@ -450,7 +472,14 @@ color: 'green', marginBottom:20}}>
       style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
       placeholder='Enter per ton rate'
       value={perTonRate}
-      onChangeText={setPerTonRate}
+      onChangeText={(text) => {
+    if (parseFloat(text) < 0) {
+      Alert.alert('Rate should be 0 or more');
+      return;
+    }
+    setPerTonRate(text);
+  }}
+     keyboardType="numeric"
     />
   </>
 )}
@@ -470,6 +499,7 @@ color: 'green', marginBottom:20}}>
             value={advance}
             onChangeText={setAdvance}
             keyboardType="numeric"
+            maxLength={3}
           
           />
 

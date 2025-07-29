@@ -192,7 +192,7 @@ useEffect(() => {
         <View style={{marginTop: 10,}}>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Indent Start Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.indent_start_date}</Text> </Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Indent Closing Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}> {item.indent_end_date}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.vehicle_type}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.vehicle_type_name}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Costing Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle/Tonn Count: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.number_of_vehicles}</Text> </Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Total Indent Amount: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.indent_amount}</Text> </Text>

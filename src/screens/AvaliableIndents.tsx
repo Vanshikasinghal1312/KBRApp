@@ -5,8 +5,12 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('window');
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export default function AvailiableIndents(){
+  const [userId, setUserId] = useState('');
+  
   const [selectedIntentNumber, setSelectedIntentNumber] = useState(null);
   const [selectedCustomerName, setSelectedCustomerName] = useState(null);
   const [selectedValue, setSelectedValue] = useState('');
@@ -25,12 +29,26 @@ const [rate, setRate] = useState('');
 const [showError, setShowError] = useState(false);
 const [brokerList, setBrokerList] = useState([]);
 
-  
-
 
   const token = '4f9e8d81c7b4a9fdf6b3e1c8930e2a171eb3f2e6bd8d59ef821a77c3a0f4d6e8';
   const API_URL = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/availableindent';
   const BROKER_API_URL = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/getallbrokers';
+  const SUBMIT_API_URL= 'https://kbrtransways.com/testing/tms/tms_api2/index.php/addsupplierdata'
+
+
+
+   useEffect(() => {
+   const fetchUserId = async () => {
+    const userData = await AsyncStorage.getItem('userData');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      setUserId(parsed.id); // make sure userId is in state
+    }
+  };
+  fetchUserId();
+}, []);
+
+
 
   useEffect(()=>{
     const fetchBrokerList= async()=>{
@@ -40,7 +58,7 @@ const [brokerList, setBrokerList] = useState([]);
           Authorization: `Bearer ${token}`
         }
       })
-              console.log("✅ Broker API Raw Response:", response.data);
+      console.log("✅ Broker API Raw Response:", response.data);
 
 if (response.data?.status === "1") {
         setBrokerList(response.data.data); // this is an array of strings
@@ -137,7 +155,7 @@ const renderIndentCard = ({ item }) => (
         <View style={{marginTop: 10,}}>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Indent Start Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.indent_start_date}</Text> </Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Indent Closing Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}> {item.indent_end_date}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.vehicle_type}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.vehicle_type_name}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Costing Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle/Tonn Count: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.number_of_vehicles}</Text> </Text>
       <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Remaining Vehicle/Tonn to Place: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.remaining_vehicle_count}</Text> </Text>
@@ -151,7 +169,7 @@ const renderIndentCard = ({ item }) => (
     if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
 
-   const handleSubmit = (item) => {
+   const handleSubmit = async (item) => {
   if (!brokerName) {
     Alert.alert("Validation Error", "Please select a Broker name.");
     return;
@@ -175,16 +193,52 @@ const renderIndentCard = ({ item }) => (
     return;
   }
 
+  try{
+    const payload= {
+    user_id: userId,
+    indent_id: item.id,
+    indent_number: item.indent_number,
+    supplier_name: brokerName,
+    vehicle_count: count,
+    rate:rate
+    }
+        console.log('📦 Payload being sent:', payload);
+
+    const response = await axios.post(SUBMIT_API_URL,payload,{
+       headers:{
+        Authorization:`Bearer ${token}`,
+        'Content-Type':'application/json'
+       }      
+    })
+        console.log('🚀 Submit response:', response.data);
+   
+    if (response.data?.status === '1'){
+      Alert.alert('Success', 'Vehicle placed successfully!');
+      setModalVisible(false);
+      setBrokerName('');
+      setCount('');
+      setRate('');
+    } else{
+            Alert.alert('Error', response.data?.msg || 'Failed to submit data.');
+
+    }
+
+  } catch(error){
+       console.error('❌ POST API Error:', error);
+    Alert.alert('Error', 'Something went wrong while submitting the data.');
+  }
+
+
   // All validations passed ✅
-  setShowError(false);
+  // setShowError(false);
 
-  Alert.alert('Vehicle Placed!');
+  // Alert.alert('Vehicle Placed!');
 
-  // Reset form
-  setBrokerName('');
-  setCount('');
-  setRate('');
-  setModalVisible(false);
+  // // Reset form
+  // setBrokerName('');
+  // setCount('');
+  // setRate('');
+  // setModalVisible(false);
 };
 
 
@@ -318,25 +372,29 @@ const renderIndentCard = ({ item }) => (
 
       <TextInput
         placeholder="Vehicle / Ton Count"
-        value={count}
-        onChangeText={setCount}
-        keyboardType="numeric"
-        style={{borderWidth: 1,
-  borderColor: '#ccc',
-  borderRadius: 8,
-  padding: 10,
-  marginBottom: 12}}
+        value={count}   
+        onChangeText={(text) => {
+            if (parseFloat(text) < 0) {
+              Alert.alert('Please Enter Valid Number');
+              return;
+            }
+            setCount(text);
+          }}
+          keyboardType="numeric"
+         style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding: 10,marginBottom: 12}}
       />
       <TextInput
         placeholder="Total Rate"
         value={rate}
-        onChangeText={setRate}
-        keyboardType="numeric"
-        style={{borderWidth: 1,
-  borderColor: '#ccc',
-  borderRadius: 8,
-  padding: 10,
-  marginBottom: 12}}
+ onChangeText={(text) => {
+            if (parseFloat(text) < 0) {
+              Alert.alert('Please Enter Valid Number');
+              return;
+            }
+            setRate(text);
+          }}        
+          keyboardType="numeric"
+        style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding: 10,marginBottom: 12}}
       />
 
       {showError && (
