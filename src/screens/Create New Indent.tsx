@@ -1,5 +1,5 @@
 import React, {useState, useEffect}from "react";
-import {View, Text, SafeAreaView, ScrollView, TextInput, Pressable, TouchableOpacity, Dimensions, ActivityIndicator, Alert} from 'react-native'
+import {View, Text, SafeAreaView, ScrollView, TextInput, Pressable, TouchableOpacity, Dimensions, ActivityIndicator, Alert, FlatList, Modal} from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('window');
@@ -9,6 +9,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
+
 
 
 export default function CreateNewIndent(){
@@ -41,7 +42,15 @@ const [perVehicleRate, setPerVehicleRate] = useState('');
 const [perTonRate, setPerTonRate] = useState('');
 const [userId, setUserId] = useState('');
 
-useEffect(() => {
+const [customerModalVisible, setCustomerModalVisible] = useState(false);
+const [searchQuery, setSearchQuery] = useState('');
+
+
+
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
    const fetchUserId = async () => {
     const userData = await AsyncStorage.getItem('userData');
     if (userData) {
@@ -91,13 +100,28 @@ useEffect(() => {
               console.log('API response1:', response.data); // 👈 ADD THIS LINE
 
         setCustomers(response.data.data); 
+                setFilteredCustomers(response.data.data);
+
         setLoading(false);
     })
       .catch(error => {
       console.error('Failed to fetch customers:', error.response?.data || error.message);
         setLoading(false);
       });
+    
   }, []);
+
+    // Example handler
+const handleSearch = text => {
+  setSearchQuery(text);
+  const filtered = customers.filter(item =>
+    item.customer_name?.toLowerCase().startsWith(text.toLowerCase())
+  );
+  setFilteredCustomers(filtered);
+};
+
+
+
 //const API_URL_ForVehicletypeCapacity = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/getVehicleType';
     useEffect(() => {
     axios.get(API_URL_ForVehicletypeCapacity, {
@@ -138,7 +162,8 @@ useEffect(() => {
     return;
   }
   const payload = {
-    customer_name: selectedCustomer,
+    // customer_name: selectedCustomer,
+    customer_name: selectedCustomer?.id, 
     indent_start_date: moment(IndentStartDate).format('DD-MM-YYYY'), 
     indent_last_date: moment(closingDate).format('DD-MM-YYYY'),
     loading_date: moment(loadingDate).format('DD-MM-YYYY'),
@@ -147,10 +172,8 @@ useEffect(() => {
     destination: destination,
     vehicle_type: vehicletypewithcapacity,
     freight_type: freightType,
-    vehicle_count: freightType === '1' ? numVehicles : '0',
-    tonnage: freightType === '2' ? tonnageCount : '',
-    per_vehicle_rate: freightType === '1' ? perVehicleRate : '',
-    per_ton_rate: freightType === '2' ? perTonRate : '',
+    vehicle_count: freightType === '1' ? numVehicles : tonnageCount,
+    per_vehicle_rate: freightType === '1' ? perVehicleRate : perTonRate,
     total_indent_amount: totalAmount,
     advance_percent: advance,
     advance_amount: advanceAmount,
@@ -188,30 +211,70 @@ useEffect(() => {
         </View>
         <View style={{ borderWidth: 1, borderColor: 'grey', borderRadius: 5, padding: 10 }}>
           <Text style={{ fontWeight: '700', fontSize: 16 }}>Customer Name <Text style={{ color: 'red' }}>*</Text></Text>
-          {loading ? (
-        <ActivityIndicator size="large" color="navy" />
-      ) : (
-        <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8,}}>
-          <Picker
-            selectedValue={selectedCustomer}
-            onValueChange={(itemValue) => setSelectedCustomer(itemValue)}
-            style={{height:52,width: '100%',}}
-          >
-            <Picker.Item label="Select Customer" value="" />
-            {customers.map((customer, index) => (
-              <Picker.Item
-                key={index}
-                label={customer.customer_name}  // replace 'name' with your actual key
-                value={customer.customer_name}
-              />
-            ))}
-          </Picker>
-        </View>
-      )}    
+          <TouchableOpacity
+  onPress={() => setCustomerModalVisible(true)}
+  style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+>
+  <Text>{selectedCustomer?.customer_name || 'Select Customer'}</Text>
+</TouchableOpacity>
+<Modal visible={customerModalVisible} animationType="slide">
+  <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    <TextInput
+      placeholder="Search Customer"
+      value={searchQuery}
+      onChangeText={handleSearch}
+      style={{
+        borderWidth: 1,
+        borderColor: '#ccc',
+        margin: 10,
+        padding: 10,
+        borderRadius: 5,
+      }}
+    />
 
-      {selectedCustomer ? (
-        <Text style={{marginTop: 10,fontSize: 15,color: 'green',}}>Selected: {selectedCustomer}</Text>
-      ) : null}     
+    {filteredCustomers.length === 0 ? (
+      <Text style={{ textAlign: 'center', marginTop: 10 }}>No data found</Text>
+    ) : (
+      <FlatList
+        data={filteredCustomers}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedCustomer(item);
+              setCustomerModalVisible(false);
+            }}
+            style={{
+              padding: 15,
+              borderBottomWidth: 1,
+              borderBottomColor: '#eee',
+            }}
+          >
+            <Text>{item.customer_name}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    )}
+
+    <TouchableOpacity
+      onPress={() => setCustomerModalVisible(false)}
+      style={{
+        padding: 10,
+        margin: 10,
+        backgroundColor: 'navy',
+        alignItems: 'center',
+        borderRadius: 5,
+      }}
+    >
+      <Text style={{color:'white', fontWeight:'bold'}}>Close</Text>
+    </TouchableOpacity>
+  </SafeAreaView>
+</Modal>
+
+         
+         
+         
+         
 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
   <View style={{ width: '48%' }}>
     <Text style={{ fontWeight: '700', fontSize: 16, marginTop:12}}>Indent Start Date<Text style={{ color: 'red' }}>*</Text></Text>  
