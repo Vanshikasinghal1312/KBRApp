@@ -14,12 +14,12 @@ export default function HomeScreen({ navigation }) {
   useLayoutEffect(() => {
   navigation.setOptions({
     headerRight: () => (
-      <TouchableOpacity onPress={handleLogout} style={{  marginRight:15,  backgroundColor: 'navy',
-    padding:12,
+      <TouchableOpacity onPress={handleLogout} style={{  marginRight:15,  backgroundColor: 'white',
+    padding:8,
     marginHorizontal:90,
     borderRadius:100, 
     alignItems: 'center', }}>
-        <Text style={{ color: 'white', fontSize: 12, fontWeight:'800'}}>Logout</Text>
+        <Text style={{ color: 'navy', fontSize: 12, fontWeight:'800'}}>Logout</Text>
       </TouchableOpacity>
     ),
   });
@@ -33,11 +33,11 @@ export default function HomeScreen({ navigation }) {
         if (storedUser) {
           setUserData(JSON.parse(storedUser));
         } else {
-          navigation.replace('LoginScreen');
+          navigation.replace('Login Screen');
         }
       } catch (error) {
         console.log('❌ Error loading user data:', error);
-        navigation.replace('LoginScreen');
+        navigation.replace('Login Screen');
       } finally {
         setLoading(false);
       }
@@ -71,32 +71,6 @@ export default function HomeScreen({ navigation }) {
       <Text style={{ fontSize:moderateScale(30),marginTop:60,fontWeight: 'bold',color: 'navy',marginLeft:wp('30%'),marginRight:wp('1%')}}>Welcome Back! </Text>
 
         <Text style={{ fontSize:moderateScale(28),fontWeight: 'bold',color: 'navy',marginLeft:wp('40%'),marginRight:wp('1%')}}>{userData.firstname}👋</Text>
-
-      {/* <View style={styles.card}>
-        <Text style={styles.label}>Username:</Text>
-        <Text style={styles.value}>{userData.username}</Text>
-
-        <Text style={styles.label}>Name:</Text>
-        <Text style={styles.value}>
-          {userData.firstname} {userData.lastname}
-        </Text>
-
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.value}>{userData.email}</Text>
-
-        <Text style={styles.label}>Phone:</Text>
-        <Text style={styles.value}>{userData.phone}</Text>
-
-        <Text style={styles.label}>Company:</Text>
-        <Text style={styles.value}>{userData.company_name}</Text>
-      </View> */}
-
-      {/* <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity> */}
-      {/* <TouchableOpacity onPress={()=>navigation.navigate('KBRIndentScreen')} style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Next</Text>
-      </TouchableOpacity> */}
     </ScrollView>
     </ImageBackground>
 

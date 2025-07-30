@@ -181,7 +181,7 @@ useEffect(() => {
         </TouchableOpacity>
           {!item.cancelled && (
     <TouchableOpacity onPress={() => handleCancelIndent(item.indent_number)} 
-    style={{backgroundColor: 'tomato',borderRadius:8,paddingVertical:8, paddingHorizontal:45,  marginTop:hp('2%')}}>
+    style={{backgroundColor: 'red',borderRadius:8,paddingVertical:8, paddingHorizontal:45,  marginTop:hp('2%')}}>
       <Text style={{ fontWeight:'bold', color: 'white' }}>Cancel</Text>
     </TouchableOpacity>
     

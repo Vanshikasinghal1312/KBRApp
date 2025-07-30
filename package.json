@@ -24,6 +24,7 @@
     "react-native": "0.80.1",
     "react-native-date-picker": "^5.0.13",
     "react-native-gesture-handler": "^2.27.2",
+    "react-native-google-places-autocomplete": "^1.4.0",
     "react-native-keychain": "^8.0.0",
     "react-native-reanimated": "^3.19.0",
     "react-native-responsive-fontsize": "^0.5.1",

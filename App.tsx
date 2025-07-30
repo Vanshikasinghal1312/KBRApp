@@ -6,17 +6,12 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/KBRIndentScreen';
 
-
-
 export default function App(){
-
-  return (
+ return (
 <SafeAreaView style={{flex:1}}> 
      <NavigationContainer>
       <StackNavigator />
      </NavigationContainer>
    </SafeAreaView>
   )
-
-
 }

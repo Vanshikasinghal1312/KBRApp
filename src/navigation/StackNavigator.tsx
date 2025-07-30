@@ -12,11 +12,21 @@ const Stack = createNativeStackNavigator();
 
 export default function StackNavigator(){
   return(
-      <Stack.Navigator initialRouteName="AuthLoadingScreen">
-        <Stack.Screen name="AuthLoadingScreen" component={AuthLoadingScreen} />
-        <Stack.Screen name='LoginScreen' component={LoginScreen}/>
-        <Stack.Screen name="MainApp" component={DrawerNavigator} />
-        <Stack.Screen name="CreateNewIndent" component={CreateNewIndent} />
+      <Stack.Navigator initialRouteName="AuthLoadingScreen" >
+        <Stack.Screen name="AuthLoadingScreen" component={AuthLoadingScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Login Screen' component={LoginScreen} options={{
+    headerStyle: {
+      backgroundColor: 'navy',
+    },
+    headerTintColor: 'white',
+  }} />
+        <Stack.Screen name="MainApp" component={DrawerNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="Create New Indent" component={CreateNewIndent} options={{
+    headerStyle: {
+      backgroundColor: 'navy',
+    },
+    headerTintColor: 'white',
+  }}  />
         
 
 

@@ -9,12 +9,12 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-
+const GOOGLE_API_KEY = 'AIzaSyD9q-QzM7KXhPS110LUa9KMqD06l35oLdg';
 
 export default function CreateNewIndent(){
-  const navigation = useNavigation();
-
+const navigation = useNavigation();
 const [freightType, setFreightType] = useState('');
 const [disclosureStatus, setDisclosureStatus] = useState('');
 const [customers, setCustomers] = useState([]);
@@ -41,14 +41,10 @@ const [tonnageCount, setTonnageCount] = useState('');
 const [perVehicleRate, setPerVehicleRate] = useState('');
 const [perTonRate, setPerTonRate] = useState('');
 const [userId, setUserId] = useState('');
-
 const [customerModalVisible, setCustomerModalVisible] = useState(false);
 const [searchQuery, setSearchQuery] = useState('');
-
-
-
-  const [filteredCustomers, setFilteredCustomers] = useState([]);
-  const [searchText, setSearchText] = useState('');
+const [filteredCustomers, setFilteredCustomers] = useState([]);
+const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
    const fetchUserId = async () => {
@@ -194,7 +190,7 @@ const handleSearch = text => {
     Alert.alert('Success', 'Indent created successfully!',[
       {
       text: 'OK',
-      onPress: () => navigation.replace('MainApp', { screen: 'KBRIndentScreen' }),
+      onPress: () => navigation.replace('MainApp', { screen: 'KBR Indent Screen' }),
     }
     ]);
   })
@@ -351,21 +347,126 @@ const handleSearch = text => {
   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
   <View style={{ width: '49%' }}>
           <Text style={{ fontWeight: '700', fontSize: 16 }}>Origin <Text style={{ color: 'red' }}>*</Text></Text>
-          <TextInput
-            style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
-            placeholder='Starting Point'
-            value={origin}
-            onChangeText={setOrigin}
-          />
+                 
+       <GooglePlacesAutocomplete
+         placeholder="Orgin"
+        onPress={(data, details = null) => {
+    const address = details?.formatted_address || data.description;
+    setOrigin(address);
+  }}
+  textInputProps={{
+    value: origin,
+    onChangeText: text => setOrigin(text),
+  }}
+         query={{
+           key: 'AIzaSyD9q-QzM7KXhPS110LUa9KMqD06l35oLdg', 
+           language: 'en', 
+         }}
+        styles={{
+  container: {
+    flex: 0,
+  },
+  textInputContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    marginBottom:25
+  },
+  textInput: {
+    marginLeft:2,
+    marginRight:2,
+    height: 43,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 6,
+    paddingHorizontal: 20,
+    fontSize: 14,
+    backgroundColor: '#fff',
+  },
+  listView: {
+    position: 'absolute',
+    top: 50, 
+    backgroundColor: '#fff',
+    elevation: 5,
+    zIndex: 1000,
+    width: '100%',
+  },
+  row: {
+    backgroundColor: '#fff',
+    padding: 12,
+    flexDirection: 'row',
+  },
+  description: {
+    color: '#000',
+  },
+}}
+
+
+
+       />
           </View>
 <View style={{ width: '49%' }}>
            <Text style={{ fontWeight: '700', fontSize: 16 }}>Destination<Text style={{ color: 'red' }}>*</Text></Text>
-          <TextInput
-            style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
-            placeholder='End Point'
-            value={destination}
-            onChangeText={setDestination}
-          />
+         
+        <GooglePlacesAutocomplete
+          placeholder="Destination"
+         
+          query={{
+            key: 'AIzaSyD9q-QzM7KXhPS110LUa9KMqD06l35oLdg', 
+            language: 'en', 
+          }}
+          onPress={(data, details = null) => {
+    const address = details?.formatted_address || data.description;
+    setDestination(address);
+  }}
+  textInputProps={{
+    value: destination,
+    onChangeText: text => setDestination(text),
+  }}
+          // fetchDetails={true}
+          // predefinedPlaces={[]} 
+          styles={{
+  container: {
+    flex: 0,
+  },
+  textInputContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+        marginBottom:25
+
+  },
+  textInput: {
+    marginLeft:2,
+    marginRight:2,
+    height: 42,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 6,
+    paddingHorizontal:10,
+    fontSize: 14,
+    backgroundColor: '#fff',
+  },
+  listView: {
+    position: 'absolute',
+    top: 50, 
+    backgroundColor: '#fff',
+    elevation: 5,
+    zIndex: 1000,
+    width: '100%',
+  },
+  row: {
+    backgroundColor: '#fff',
+    padding: 8,
+    flexDirection: 'row',
+  },
+  description: {
+    color: '#000',
+  },
+}}
+
+
+        />
      </View>
      
 </View>
@@ -373,7 +474,7 @@ const handleSearch = text => {
            {loading ? (
         <ActivityIndicator size="large" color="navy" />
       ) : (
-        <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8,marginBottom:20,}}>
+        <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8,marginBottom:20,height:45}}>
           <Picker
             selectedValue={vehicletypewithcapacity}
             onValueChange={(itemValue) => setvehicletypewithcapacity(itemValue)}
@@ -390,13 +491,12 @@ const handleSearch = text => {
           </Picker>
         </View>
       )}    
-
       {vehicletypewithcapacity ? (
-        <Text style={{marginTop: 10,fontSize: 16,color: 'green',}}>Selected: {vehicletypewithcapacity}</Text>
+        <Text style={{marginTop:1,fontSize: 14,color: 'green',marginVertical:1, marginBottom:5}}>Selected: {vehicletypewithcapacity}</Text>
       ) : null}
 
-           <Text style={{ fontWeight: '600', fontSize: 16 }}>Freight Type<Text style={{ color: 'red' }}>*</Text></Text>
-           <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8, marginBottom:20}}>
+           <Text style={{ fontWeight: '600', fontSize: 16, marginBottom:4 }}>Freight Type<Text style={{ color: 'red' }}>*</Text></Text>
+           <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8, marginBottom:20, height:45}}>
         <Picker
           selectedValue={freightType}
           onValueChange={(itemValue) => setFreightType(itemValue)}
@@ -483,7 +583,8 @@ color: 'green', marginBottom:20}}>
     />
   </>
 )}
-   
+   <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+    <View style={{ width: '49%' }}>
              <Text style={{ fontWeight: '700', fontSize: 16 }}>Total Indent Amount<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
             style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
@@ -491,7 +592,8 @@ color: 'green', marginBottom:20}}>
             value={totalAmount}
             editable={false}          
           />
-          
+         </View>
+         <View style={{ width: '49%' }}>
              <Text style={{ fontWeight: '700', fontSize: 16 }}>Advance %<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
             style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
@@ -502,7 +604,11 @@ color: 'green', marginBottom:20}}>
             maxLength={3}
           
           />
+</View> 
+</View>
 
+<View style={{flexDirection:'row', justifyContent:'space-between'}}> 
+  <View style={{width:'49%'}}>
            <Text style={{ fontWeight: '700', fontSize: 16 }}>Advance Amount<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
             style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
@@ -512,8 +618,10 @@ color: 'green', marginBottom:20}}>
             onChangeText={setAdvanceAmount}
           />
 
+</View>
+<View style={{width:'49%'}}>
            <Text style={{ fontWeight: '700', fontSize: 16 }}>Is Disclosed<Text style={{ color: 'red' }}>*</Text></Text>
-          <View style={{borderWidth: 1,borderColor: '#aaa',borderRadius: 8,}}>
+          <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8,height:42, marginTop:5}}>
         <Picker
           selectedValue={disclosureStatus}
           onValueChange={(itemValue) => setDisclosureStatus(itemValue)}
@@ -525,12 +633,12 @@ color: 'green', marginBottom:20}}>
         </Picker>
       </View>
       {disclosureStatus ? (
-        <Text style={{marginTop: 10,fontSize: 16,
-color: 'green',}}>
+        <Text style={{marginTop:5,fontSize: 14,color: 'green', }}>
           Selected: {disclosureStatus === '0' ? 'Disclosed' : 'Not Disclosed'}
         </Text>
       ) : null}
-         
+      </View>
+     </View>    
              <Text style={{ fontWeight: '700', fontSize: 16 }}>Target Rate (Per Ton/Vehicle)<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
             style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
