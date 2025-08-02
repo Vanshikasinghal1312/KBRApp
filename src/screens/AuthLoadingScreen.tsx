@@ -12,11 +12,11 @@ export default function AuthLoadingScreen({ navigation }) {
         if (userData !== null) {
           navigation.replace('MainApp');
         } else {
-          navigation.replace('LoginScreen');
+          navigation.replace('Login Screen');
         }
       } catch (e) {
         console.log("❌ Error reading AsyncStorage:", e);
-        navigation.replace('LoginScreen');
+        navigation.replace('Login Screen');
       }
     };
 

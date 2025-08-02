@@ -1,8 +1,10 @@
-import React, {useState, useEffect}from "react";
-import {View, Text, SafeAreaView, ScrollView, TextInput, Pressable, TouchableOpacity, Dimensions, ActivityIndicator, Alert, FlatList, Modal} from 'react-native'
+import React, {useState, useEffect, useRef}from "react";
+import {View, Text, SafeAreaView, ScrollView, TextInput,TouchableWithoutFeedback,Keyboard, Pressable, TouchableOpacity,Platform, Dimensions, ActivityIndicator, Alert, FlatList, Modal, KeyboardAvoidingView} from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('window');
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import DatePicker from 'react-native-date-picker';
@@ -11,9 +13,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-const GOOGLE_API_KEY = 'AIzaSyD9q-QzM7KXhPS110LUa9KMqD06l35oLdg';
 
 export default function CreateNewIndent(){
+
 const navigation = useNavigation();
 const [freightType, setFreightType] = useState('');
 const [disclosureStatus, setDisclosureStatus] = useState('');
@@ -45,6 +47,12 @@ const [customerModalVisible, setCustomerModalVisible] = useState(false);
 const [searchQuery, setSearchQuery] = useState('');
 const [filteredCustomers, setFilteredCustomers] = useState([]);
 const [searchText, setSearchText] = useState('');
+
+  const [originListVisible, setOriginListVisible] = useState(false);
+  const [vehicleType, setVehicleType] = useState('');
+
+  const [originDropdownOpen, setOriginDropdownOpen] = useState(false);
+  const [destinationDropdownOpen, setDestinationDropdownOpen] = useState(false)
 
   useEffect(() => {
    const fetchUserId = async () => {
@@ -190,7 +198,7 @@ const handleSearch = text => {
     Alert.alert('Success', 'Indent created successfully!',[
       {
       text: 'OK',
-      onPress: () => navigation.replace('MainApp', { screen: 'KBR Indent Screen' }),
+      onPress: () => navigation.replace('MainApp', { screen: 'KBR Indents' }),
     }
     ]);
   })
@@ -200,16 +208,21 @@ const handleSearch = text => {
   });
 };
   return(
-       <SafeAreaView>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ marginHorizontal: 20, marginTop:10 }}>
-        <View style={{ backgroundColor: 'darkblue', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 6, marginBottom: 20 }}>
-          <Text style={{ color: 'white', fontSize: 16 }}>New Indent Details</Text>
+     <KeyboardAwareScrollView
+      style={{ flex: 1, backgroundColor: 'white' }}
+      enableOnAndroid={true}
+      keyboardShouldPersistTaps="handled"
+      extraScrollHeight={20}
+      contentContainerStyle={{ padding: 16 }}     
+    >
+        <View style={{ backgroundColor: 'darkblue', height: hp('5%'), justifyContent: 'center', alignItems: 'center', borderRadius: moderateScale(6), marginBottom: hp('2%') }}>
+          <Text style={{ color: 'white', fontSize: moderateScale(16) }}>New Indent Details</Text>
         </View>
-        <View style={{ borderWidth: 1, borderColor: 'grey', borderRadius: 5, padding: 10 }}>
-          <Text style={{ fontWeight: '700', fontSize: 16 }}>Customer Name <Text style={{ color: 'red' }}>*</Text></Text>
+        <View style={{ borderWidth: scale(1), borderColor: 'grey', borderRadius:moderateScale(5), padding: moderateScale(10) }}>
+          <Text style={{ fontWeight: '700', fontSize:  moderateScale(14) }}>Customer Name <Text style={{ color: 'red' }}>*</Text></Text>
           <TouchableOpacity
   onPress={() => setCustomerModalVisible(true)}
-  style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+  style={{ borderWidth: 1, padding: 10, marginBottom: hp('0.5%'), borderRadius: moderateScale(5) }}
 >
   <Text>{selectedCustomer?.customer_name || 'Select Customer'}</Text>
 </TouchableOpacity>
@@ -220,11 +233,11 @@ const handleSearch = text => {
       value={searchQuery}
       onChangeText={handleSearch}
       style={{
-        borderWidth: 1,
+        borderWidth: scale(1),
         borderColor: '#ccc',
-        margin: 10,
-        padding: 10,
-        borderRadius: 5,
+        margin: moderateScale(10),
+        padding: moderateScale(10),
+        borderRadius: moderateScale(10),
       }}
     />
 
@@ -255,11 +268,11 @@ const handleSearch = text => {
     <TouchableOpacity
       onPress={() => setCustomerModalVisible(false)}
       style={{
-        padding: 10,
-        margin: 10,
+        padding: moderateScale(10),
+        margin: moderateScale(10),
         backgroundColor: 'navy',
         alignItems: 'center',
-        borderRadius: 5,
+        borderRadius:moderateScale(5),
       }}
     >
       <Text style={{color:'white', fontWeight:'bold'}}>Close</Text>
@@ -273,9 +286,9 @@ const handleSearch = text => {
          
 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
   <View style={{ width: '48%' }}>
-    <Text style={{ fontWeight: '700', fontSize: 16, marginTop:12}}>Indent Start Date<Text style={{ color: 'red' }}>*</Text></Text>  
+    <Text style={{ fontWeight: '700', fontSize: moderateScale(14), marginTop:hp('1%')}}>Indent Start Date<Text style={{ color: 'red' }}>*</Text></Text>  
       <TouchableOpacity onPress={() => setOpen(true)}
-        style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+        style={{borderWidth: moderateScale(1),borderColor: 'black',padding:9,borderRadius:moderateScale(5),marginTop:hp('1%'),marginBottom:hp('1%')}}>
           <Text>{moment(IndentStartDate).format('DD-MM-YYYY')}</Text>
       </TouchableOpacity>
 </View>
@@ -290,9 +303,9 @@ const handleSearch = text => {
     }}
     onCancel={() => {setOpen(false)}} />
  <View style={{ width: '48%' }}>
-  <Text style={{ fontWeight: '700', fontSize: 16,marginTop:12 }}>Indent Closing Date <Text style={{ color: 'red' }}>*</Text></Text>
+  <Text style={{ fontWeight: '700', fontSize: moderateScale(14),marginTop:hp('1%') }}>Indent Close Date <Text style={{ color: 'red' }}>*</Text></Text>
   <TouchableOpacity onPress={() => setOpenclose(true)}
-  style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+  style={{borderWidth: moderateScale(1),borderColor: 'black',padding:9,borderRadius:moderateScale(5),marginTop:hp('1%'),marginBottom:hp('1%')}}>
   <Text>{moment(closingDate).format('DD-MM-YYYY')}</Text>
   </TouchableOpacity>
   </View>
@@ -309,9 +322,9 @@ const handleSearch = text => {
    onCancel={() => {setOpenclose(false)}}/>
 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
   <View style={{ width: '46%' }}>
-  <Text style={{ fontWeight: '700', fontSize: 16 }}>Loading Date <Text style={{ color: 'red' }}>*</Text></Text>
+  <Text style={{ fontWeight: '700', fontSize: moderateScale(14),marginTop:hp('1%') }}>Loading Date <Text style={{ color: 'red' }}>*</Text></Text>
     <TouchableOpacity onPress={() => setOpenloading(true)}
-      style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+      style={{borderWidth:moderateScale(1),borderColor: 'black',padding:9,borderRadius:moderateScale(5),marginTop:hp('1%'),marginBottom:hp('1%')}}>
         <Text>{moment(loadingDate).format('DD-MM-YYYY')}</Text>
       </TouchableOpacity>
     </View>
@@ -325,10 +338,10 @@ const handleSearch = text => {
     setLoadingDate(selectedDate);
     }}
     onCancel={() => {setOpenloading(false)}}/>      
- <View style={{ width: '52%' }}>
-  <Text style={{ fontWeight: '700', fontSize: 16 }}>Expected Delivery Date <Text style={{ color: 'red' }}>*</Text></Text>
+ <View style={{ width: '51%' }}>
+  <Text style={{ fontWeight: '700', fontSize: moderateScale(14),marginTop:hp('1%') }}>Exp. Delivery Date <Text style={{ color: 'red' }}>*</Text></Text>
   <TouchableOpacity onPress={() => setOpendelivery(true)}
-    style={{borderWidth: 1,borderColor: 'black',padding:9,borderRadius: 5,marginTop:6,marginBottom:20}}>
+      style={{borderWidth:moderateScale(1),borderColor: 'black',padding:9,borderRadius:moderateScale(5),marginTop:hp('1%'),marginBottom:hp('1%')}}>
     <Text>{moment(deliveryDate).format('DD-MM-YYYY')}</Text>
   </TouchableOpacity>
 </View>
@@ -344,73 +357,123 @@ const handleSearch = text => {
                   }}
                   onCancel={() => {setOpendelivery(false)}}
                 />
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-  <View style={{ width: '49%' }}>
-          <Text style={{ fontWeight: '700', fontSize: 16 }}>Origin <Text style={{ color: 'red' }}>*</Text></Text>
-                 
-       <GooglePlacesAutocomplete
-         placeholder="Orgin"
-        onPress={(data, details = null) => {
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between',  }}>
+  <View style={{ width: '49%', zIndex: 10}}>
+          <Text style={{ fontWeight: '700', fontSize: moderateScale(14), }}>Origin <Text style={{ color: 'red' }}>*</Text></Text>   
+          {originDropdownOpen && (
+  <View
+    pointerEvents="box-only"
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'transparent',
+      zIndex: 9, // on top of everything
+    }}
+  />
+)}           
+    <View style={{ zIndex: 10, elevation: 10 }}>
+     <GooglePlacesAutocomplete
+  placeholder="Origin"
+  fetchDetails={true}
+  enablePoweredByContainer={false}
+  onPress={(data, details = null) => {
     const address = details?.formatted_address || data.description;
     setOrigin(address);
+
   }}
+   
   textInputProps={{
-    value: origin,
-    onChangeText: text => setOrigin(text),
+    value: origin, // ✅ Keeps value in sync
+    onChangeText: setOrigin,
+    
   }}
-         query={{
-           key: 'AIzaSyD9q-QzM7KXhPS110LUa9KMqD06l35oLdg', 
-           language: 'en', 
-         }}
-        styles={{
-  container: {
-    flex: 0,
-  },
-  textInputContainer: {
-    backgroundColor: 'transparent',
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-    marginBottom:25
-  },
-  textInput: {
-    marginLeft:2,
-    marginRight:2,
-    height: 43,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 6,
-    paddingHorizontal: 20,
-    fontSize: 14,
-    backgroundColor: '#fff',
-  },
-  listView: {
-    position: 'absolute',
-    top: 50, 
-    backgroundColor: '#fff',
-    elevation: 5,
-    zIndex: 1000,
-    width: '100%',
-  },
-  row: {
-    backgroundColor: '#fff',
-    padding: 12,
-    flexDirection: 'row',
-  },
-  description: {
-    color: '#000',
-  },
-}}
 
-
-
-       />
+  
+  query={{
+    key: 'AIzaSyD9q-QzM7KXhPS110LUa9KMqD06l35oLdg',
+    language: 'en',
+  }}
+        debounce={300}
+        minLength={2}
+  styles={{
+    container: { flex: 0 },
+    textInputContainer: {
+      backgroundColor: 'transparent',
+      borderTopWidth: 0,
+      borderBottomWidth: 0,
+      marginBottom: hp('1%'),
+    },
+    textInput: {
+      marginLeft: wp('0.5%'),
+      marginRight: wp('0.5%'),
+      height: hp('4.2%'),
+      borderWidth: moderateScale(1),
+      borderColor: 'black',
+      borderRadius: moderateScale(6),
+      paddingHorizontal: 20,
+      fontSize: moderateScale(12),
+      backgroundColor: '#fff',
+    },
+    listView: {
+      zIndex:1000,
+      position: 'absolute',
+      top: hp('6%'),
+      backgroundColor: '#fff',
+      elevation: 5,
+      width: wp('100%'),
+    },
+    row: {
+      backgroundColor: '#fff',
+      padding: wp('1%'),
+      flexDirection: 'row',
+    },
+    description: {
+      color: '#000',
+    },
+  }}
+/>
+{origin !== '' && (
+    <TouchableOpacity
+      onPress={() => {
+        setOrigin('');
+        setOriginDropdownOpen(false);
+      }}
+      style={{
+        position: 'absolute',
+        right: 10,
+        top: 15,
+        zIndex: 1001,
+      }}
+    >
+      <Text style={{ fontSize: 12 , color:'red'}}>❌</Text>
+    </TouchableOpacity>
+  )}
+</View>
           </View>
-<View style={{ width: '49%' }}>
-           <Text style={{ fontWeight: '700', fontSize: 16 }}>Destination<Text style={{ color: 'red' }}>*</Text></Text>
-         
-        <GooglePlacesAutocomplete
-          placeholder="Destination"
-         
+<View style={{ width: '49%',zIndex: 5, elevation:10}}>
+  <Text style={{ fontWeight: '700', fontSize: moderateScale(14)}}>Destination<Text style={{ color: 'red' }}>*</Text></Text>
+    <View style={{ zIndex: 10, elevation: 10 }}>
+      {destinationDropdownOpen && (
+  <View
+    pointerEvents="box-only"
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'transparent',
+      zIndex: 9, // on top of everything
+    }}
+  />
+)} 
+   <GooglePlacesAutocomplete
+     placeholder="Destination"
+          fetchDetails={true}
+        enablePoweredByContainer={false}
           query={{
             key: 'AIzaSyD9q-QzM7KXhPS110LUa9KMqD06l35oLdg', 
             language: 'en', 
@@ -418,13 +481,16 @@ const handleSearch = text => {
           onPress={(data, details = null) => {
     const address = details?.formatted_address || data.description;
     setDestination(address);
+
   }}
   textInputProps={{
     value: destination,
-    onChangeText: text => setDestination(text),
+    onChangeText: (text) => setDestination(text),
+    
+    
   }}
-          // fetchDetails={true}
-          // predefinedPlaces={[]} 
+        debounce={300}
+        minLength={2}
           styles={{
   container: {
     flex: 0,
@@ -433,48 +499,63 @@ const handleSearch = text => {
     backgroundColor: 'transparent',
     borderTopWidth: 0,
     borderBottomWidth: 0,
-        marginBottom:25
-
+    marginBottom: hp('1%')
   },
   textInput: {
-    marginLeft:2,
-    marginRight:2,
-    height: 42,
-    borderWidth: 1,
+    marginLeft:wp('0.5%'),
+    marginRight:wp('0.5%'),
+    height: hp('4.2%'),
+    borderWidth: moderateScale(1),
     borderColor: 'black',
-    borderRadius: 6,
-    paddingHorizontal:10,
-    fontSize: 14,
+    borderRadius: moderateScale(6),
+    paddingHorizontal: 20,
+    fontSize: moderateScale(12),
     backgroundColor: '#fff',
   },
   listView: {
     position: 'absolute',
-    top: 50, 
+    top: hp('6%'),               
     backgroundColor: '#fff',
     elevation: 5,
     zIndex: 1000,
-    width: '100%',
+    width: wp('100%'),  
   },
   row: {
     backgroundColor: '#fff',
-    padding: 8,
+    padding: wp('1%'),
     flexDirection: 'row',
   },
   description: {
     color: '#000',
   },
 }}
+/>
+{destination !== '' && (
+    <TouchableOpacity
+      onPress={() => {
+        setDestination('');
+        setDestinationDropdownOpen(false);
+      }}
+      style={{
+        position: 'absolute',
+        right: 10,
+        top: 15,
+        zIndex: 1001,
+      }}
+    >
+      <Text style={{ fontSize: 12 , color:'red'}}>❌</Text>
+    </TouchableOpacity>
+  )}
+             </View>
 
-
-        />
      </View>
      
 </View>
-           <Text style={{ fontWeight: '700', fontSize: 16 }}>Vehicle Type with capacity <Text style={{ color: 'red' }}>*</Text></Text>
+           <Text style={{ fontWeight: '700', fontSize: moderateScale(14),marginTop:hp('1%') }}>Vehicle Type with capacity <Text style={{ color: 'red' }}>*</Text></Text>
            {loading ? (
         <ActivityIndicator size="large" color="navy" />
       ) : (
-        <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8,marginBottom:20,height:45}}>
+        <View style={{borderWidth: 1,marginTop:hp('0.2%'),borderColor: 'black',borderRadius: wp('2%'), marginBottom: hp('2.5%'), height: hp('5%'),justifyContent:'center'}}>
           <Picker
             selectedValue={vehicletypewithcapacity}
             onValueChange={(itemValue) => setvehicletypewithcapacity(itemValue)}
@@ -495,8 +576,8 @@ const handleSearch = text => {
         <Text style={{marginTop:1,fontSize: 14,color: 'green',marginVertical:1, marginBottom:5}}>Selected: {vehicletypewithcapacity}</Text>
       ) : null}
 
-           <Text style={{ fontWeight: '600', fontSize: 16, marginBottom:4 }}>Freight Type<Text style={{ color: 'red' }}>*</Text></Text>
-           <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8, marginBottom:20, height:45}}>
+           <Text style={{ fontWeight: '600', fontSize: moderateScale(14), marginBottom: hp('0.1%') }}>Freight Type<Text style={{ color: 'red' }}>*</Text></Text>
+           <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8, marginBottom:hp('1%'), height:hp('5%'),marginTop:hp('1%'),justifyContent:'center'}}>
         <Picker
           selectedValue={freightType}
           onValueChange={(itemValue) => setFreightType(itemValue)}
@@ -508,7 +589,7 @@ const handleSearch = text => {
         </Picker>
       </View>
       {freightType ? (
-        <Text style={{marginTop:1,fontSize: 15,
+        <Text style={{marginTop:hp('0.1%'),fontSize: 10,
 color: 'green', marginBottom:20}}>
           Selected: {freightType === '1' ? 'Per Vehicle' : 'Per Ton'}
         </Text>
@@ -517,7 +598,7 @@ color: 'green', marginBottom:20}}>
           
       {freightType === '1' && (
   <>
-    <Text style={{ fontWeight: '700', fontSize: 16 }}>Number of Vehicles<Text style={{ color: 'red' }}>*</Text></Text>
+    <Text style={{ fontWeight: '700', fontSize: moderateScale(14) }}>Number of Vehicles<Text style={{ color: 'red' }}>*</Text></Text>
     <TextInput
       style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
       placeholder='Enter number of vehicles'
@@ -532,7 +613,7 @@ color: 'green', marginBottom:20}}>
   keyboardType="numeric"
     />
 
-    <Text style={{ fontWeight: '700', fontSize: 16 }}>Per Vehicle Rate (customer)<Text style={{ color: 'red' }}>*</Text></Text>
+    <Text style={{ fontWeight: '700', fontSize:  moderateScale(14)  }}>Per Vehicle Rate (customer)<Text style={{ color: 'red' }}>*</Text></Text>
     <TextInput
       style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
       placeholder='Enter per vehicle rate'
@@ -552,7 +633,7 @@ color: 'green', marginBottom:20}}>
 
 {freightType === '2' && (
   <>
-    <Text style={{ fontWeight: '700', fontSize: 16 }}>Tonnage Count<Text style={{ color: 'red' }}>*</Text></Text>
+    <Text style={{ fontWeight: '700', fontSize:  moderateScale(14)  }}>Tonnage Count<Text style={{ color: 'red' }}>*</Text></Text>
     <TextInput
       style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
       placeholder='Enter total tonnage'
@@ -567,9 +648,9 @@ color: 'green', marginBottom:20}}>
    
     />
 
-    <Text style={{ fontWeight: '700', fontSize: 16 }}>Per Ton Rate<Text style={{ color: 'red' }}>*</Text></Text>
+    <Text style={{ fontWeight: '700', fontSize:  moderateScale(14)  }}>Per Ton Rate<Text style={{ color: 'red' }}>*</Text></Text>
     <TextInput
-      style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
+      style={{ borderWidth:moderateScale(1), borderRadius: moderateScale(5), height:verticalScale(29), marginTop: hp('1%'), marginBottom: hp('1.5%'), paddingLeft:wp('1%') }}
       placeholder='Enter per ton rate'
       value={perTonRate}
       onChangeText={(text) => {
@@ -585,18 +666,18 @@ color: 'green', marginBottom:20}}>
 )}
    <View style={{flexDirection:'row', justifyContent:'space-between'}}>
     <View style={{ width: '49%' }}>
-             <Text style={{ fontWeight: '700', fontSize: 16 }}>Total Indent Amount<Text style={{ color: 'red' }}>*</Text></Text>
+             <Text style={{ fontWeight: '700', fontSize: moderateScale(14)}}>Total Indent Amount<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
-            style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
+            style={{ borderWidth: moderateScale(1), borderRadius: moderateScale(5), height: verticalScale(30), marginTop:  hp('1%'), marginBottom:  hp('1.5%'), paddingLeft:wp('2%'),color:'black' }}
             placeholder='Total Amount '
             value={totalAmount}
             editable={false}          
           />
          </View>
          <View style={{ width: '49%' }}>
-             <Text style={{ fontWeight: '700', fontSize: 16 }}>Advance %<Text style={{ color: 'red' }}>*</Text></Text>
+             <Text style={{ fontWeight: '700', fontSize: moderateScale(14) }}>Advance %<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
-            style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
+            style={{ borderWidth: moderateScale(1), borderRadius: moderateScale(5), height: verticalScale(30), marginTop: hp('1%'), marginBottom: hp('1.5%'), paddingLeft:wp('2%'),color:'black' }}
             placeholder="Enter %"
             value={advance}
             onChangeText={setAdvance}
@@ -609,9 +690,9 @@ color: 'green', marginBottom:20}}>
 
 <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
   <View style={{width:'49%'}}>
-           <Text style={{ fontWeight: '700', fontSize: 16 }}>Advance Amount<Text style={{ color: 'red' }}>*</Text></Text>
+           <Text style={{ fontWeight: '700', fontSize:  moderateScale(14)  }}>Advance Amount<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
-            style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
+            style={{ borderWidth: scale(1), borderRadius:moderateScale(5), height: verticalScale(30), marginTop: hp('1%'), marginBottom: hp('1.5%'), paddingLeft:wp('2%'), color:'black' }}
             placeholder="Advance Amount"
             value={advanceAmount}
             editable={false}
@@ -620,12 +701,12 @@ color: 'green', marginBottom:20}}>
 
 </View>
 <View style={{width:'49%'}}>
-           <Text style={{ fontWeight: '700', fontSize: 16 }}>Is Disclosed<Text style={{ color: 'red' }}>*</Text></Text>
-          <View style={{borderWidth: 1,borderColor: 'black',borderRadius: 8,height:42, marginTop:5}}>
+           <Text style={{ fontWeight: '700', fontSize:  moderateScale(14)  }}>Is Disclosed<Text style={{ color: 'red' }}>*</Text></Text>
+          <View style={{borderWidth: scale(1),borderColor: 'black',borderRadius: moderateScale(6),height:verticalScale(30), marginTop:hp('1%'), justifyContent:'center'}}>
         <Picker
           selectedValue={disclosureStatus}
           onValueChange={(itemValue) => setDisclosureStatus(itemValue)}
-          style={{ height: 50,width: '100%',}}
+          style={{ height:hp('5%'),width: '100%',}}
         >
           <Picker.Item label="Select" value="" />
           <Picker.Item label="Disclosed" value="0" />
@@ -633,27 +714,28 @@ color: 'green', marginBottom:20}}>
         </Picker>
       </View>
       {disclosureStatus ? (
-        <Text style={{marginTop:5,fontSize: 14,color: 'green', }}>
-          Selected: {disclosureStatus === '0' ? 'Disclosed' : 'Not Disclosed'}
+        <Text style={{marginTop:hp('0.5%'),fontSize:moderateScale(10),color: 'green', }}>
+          Select: {disclosureStatus === '0' ? 'Disclosed' : 'Not Disclosed'}
         </Text>
       ) : null}
       </View>
      </View>    
-             <Text style={{ fontWeight: '700', fontSize: 16 }}>Target Rate (Per Ton/Vehicle)<Text style={{ color: 'red' }}>*</Text></Text>
+             <Text style={{ fontWeight: '700', fontSize: moderateScale(14) }}>Target Rate (Per Ton/Vehicle)<Text style={{ color: 'red' }}>*</Text></Text>
           <TextInput
-            style={{ borderWidth: 1, borderRadius: 5, height: 40, marginTop: 6, marginBottom: 20, paddingLeft: 8 }}
+            style={{ borderWidth: scale(1), borderRadius: moderateScale(5), height:verticalScale(30), marginTop: hp('1%'), marginBottom: verticalScale(20), paddingLeft: scale(8) }}
             placeholder=' '
             value={targetRate}
             onChangeText={setTargetRate}
           />
         
           <Pressable  onPress={handleSubmit}>
-            <View style={{ backgroundColor: 'navy', height: 40, borderRadius: 6, width: '40%', justifyContent: 'center', alignSelf: 'center' }}>
-              <Text style={{ alignSelf: 'center', color: 'white', fontWeight: '600', fontSize: 16 }}>Add Indent</Text>
+            <View style={{ backgroundColor: 'navy', height:verticalScale(30), borderRadius: moderateScale(5), width: '60%', justifyContent: 'center', alignSelf: 'center' , marginBottom: hp('8%')}}>
+              <Text style={{ alignSelf: 'center', color: 'white', fontWeight: '600', fontSize: moderateScale(15) }}>Add Indent</Text>
             </View>
           </Pressable>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+    </KeyboardAwareScrollView>
+
     )
 }

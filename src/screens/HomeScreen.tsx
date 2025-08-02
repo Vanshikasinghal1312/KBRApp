@@ -14,12 +14,12 @@ export default function HomeScreen({ navigation }) {
   useLayoutEffect(() => {
   navigation.setOptions({
     headerRight: () => (
-      <TouchableOpacity onPress={handleLogout} style={{  marginRight:15,  backgroundColor: 'white',
-    padding:8,
-    marginHorizontal:90,
-    borderRadius:100, 
+      <TouchableOpacity onPress={handleLogout} style={{  marginRight:wp('5%'),  backgroundColor: 'white',
+    padding:verticalScale(6) ,
+     marginHorizontal: scale(80),
+  borderRadius: scale(100),
     alignItems: 'center', }}>
-        <Text style={{ color: 'navy', fontSize: 12, fontWeight:'800'}}>Logout</Text>
+        <Text style={{ color: 'navy', fontSize: moderateScale(10), fontWeight:'bold'}}>Logout</Text>
       </TouchableOpacity>
     ),
   });
@@ -48,7 +48,7 @@ export default function HomeScreen({ navigation }) {
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userData');
-    navigation.replace('LoginScreen');
+    navigation.replace('Login Screen');
   };
 
   if (loading) {
@@ -65,12 +65,12 @@ export default function HomeScreen({ navigation }) {
     <ImageBackground 
     style={{  flex:1,
     }}
-    source={require('../assets/image/truck2.png')}
+    source={require('../assets/image/login_Image.png')}
     resizeMode='cover'>
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={{ fontSize:moderateScale(30),marginTop:60,fontWeight: 'bold',color: 'navy',marginLeft:wp('30%'),marginRight:wp('1%')}}>Welcome Back! </Text>
+      <Text style={{ fontSize:moderateScale(35), fontStyle: 'italic',marginTop:hp('6%'),fontWeight: 'bold',color: 'white',alignItems:'center', textAlign:'center'}}>Welcome Back! </Text>
 
-        <Text style={{ fontSize:moderateScale(28),fontWeight: 'bold',color: 'navy',marginLeft:wp('40%'),marginRight:wp('1%')}}>{userData.firstname}👋</Text>
+        <Text style={{ fontSize:moderateScale(32),fontStyle: 'italic',fontWeight: 'bold',color: 'white',alignItems:'center', textAlign:'center'}}>{userData.firstname}👋</Text>
     </ScrollView>
     </ImageBackground>
 
@@ -86,36 +86,5 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     flexGrow: 1,
-  },
-  
-  card: {
-    backgroundColor: '#ffffff',
-    padding: 20,
-    borderRadius: 12,
-    elevation: 3,
-    marginBottom: 30,
-  },
-  label: {
-    fontSize: 16,
-    color: '#444',
-    fontWeight: '600',
-    marginTop: 10,
-  },
-  value: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 6,
-  },
-  logoutButton: {
-    backgroundColor: 'navy',
-    padding: 14,
-    marginHorizontal:90,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  logoutText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 });

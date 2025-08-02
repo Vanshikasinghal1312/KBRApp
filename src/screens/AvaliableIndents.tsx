@@ -1,15 +1,19 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, TextInput, TouchableOpacity, Dimensions, FlatList, ActivityIndicator, Alert, Modal} from 'react-native'
+import {View, Text, TextInput, TouchableOpacity, Dimensions, FlatList, ActivityIndicator, Alert, Modal, AppState} from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('window');
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+
 
 
 export default function AvailiableIndents(){
   const [userId, setUserId] = useState('');
+const [refreshing, setRefreshing] = useState(false);
+  
   
   const [selectedIntentNumber, setSelectedIntentNumber] = useState(null);
   const [selectedCustomerName, setSelectedCustomerName] = useState(null);
@@ -34,6 +38,25 @@ const [brokerList, setBrokerList] = useState([]);
   const API_URL = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/availableindent';
   const BROKER_API_URL = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/getallbrokers';
   const SUBMIT_API_URL= 'https://kbrtransways.com/testing/tms/tms_api2/index.php/addsupplierdata'
+
+
+  useEffect(() => {
+  const subscription = AppState.addEventListener('change', (nextAppState) => {
+    if (nextAppState === 'active') {
+      fetchData(); // Refresh data when app is focused again
+    }
+  });
+
+  return () => {
+    subscription.remove(); // Clean up
+  };
+}, []);
+
+useFocusEffect(
+  React.useCallback(() => {
+    fetchData(); // Refresh data every time screen comes into focus
+  }, [])
+);
 
 
 
@@ -119,7 +142,6 @@ if (response.data?.status === "1") {
 
   setData(updatedData);
 
-  // Update filteredData to keep UI consistent
   const updatedFilteredData = filteredData.map((item) =>
     item.indent_number === indentNumber
       ? { ...item, showDetails: !item.showDetails }
@@ -129,44 +151,44 @@ if (response.data?.status === "1") {
   setFilteredData(updatedFilteredData);
 };
 const renderIndentCard = ({ item }) => (
-    <View style={{backgroundColor: 'white',borderRadius: 12, padding:20,marginBottom: 16,elevation: 3, marginRight: wp('1%'), marginLeft:hp('0.1%')}}>
-      <Text style={{color:'navy',marginBottom: 2, fontWeight:'bold', fontSize:20, textAlign:'center',textDecorationLine: 'underline'
-}}><Text style={{fontWeight: '800',fontSize: 20,color: 'navy'}}>{item.indent_number}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Customer Name:<Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}> {item.supplier_name}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Origin: <Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}>{item.from_location}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 17,color: 'navy',}}>Destination: <Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}>{item.to_location}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Loading Date: <Text style={{fontWeight:'500',fontSize: 17,color: 'black',}}>{item.loading_date}</Text> </Text>
+    <View style={{backgroundColor: 'white',borderRadius: scale(12), padding: moderateScale(20),marginBottom: verticalScale(16), marginRight: wp('1%'), marginLeft:hp('0.1%')}}>
+      <Text style={{color:'navy',marginBottom: verticalScale(2),fontWeight: 'bold',fontSize: scale(20), textAlign:'center',textDecorationLine: 'underline'
+}}><Text style={{fontWeight: '800',fontSize:scale(20),color: 'navy'}}>{item.indent_number}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Customer Name:<Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}> {item.supplier_name}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Origin: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.from_location}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Destination: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.to_location}</Text> </Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Loading Date: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.loading_date}</Text> </Text>
    
-   <View style={{flexDirection:'row', justifyContent:'space-evenly',marginTop: hp('2%') }}>
+   <View style={{flexDirection:'row', justifyContent:'space-between',marginTop: hp('1%') }}>
    
-       <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{ backgroundColor: 'navy',borderRadius:8,paddingVertical:8, paddingHorizontal:15, alignItems:'center', alignSelf:'center', marginTop:hp('2%')}}>
-          <Text style={{color: 'white',fontWeight: 'bold',}}>{item.showDetails ? 'View less' : 'View more details'}</Text>
+       <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{ backgroundColor: 'navy',borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(20), alignItems:'center', alignSelf:'center', marginTop:hp('2%'), marginLeft:wp('0.1%'), marginRight:wp('2%')}}>
+          <Text style={{color: 'white',fontWeight: 'bold',}}>{item.showDetails ? 'View less' : 'View more'}</Text>
         </TouchableOpacity>
      <TouchableOpacity  onPress={() => {
     setSelectedIndent(item);
     setModalVisible(true);
   }}
-   style={{ backgroundColor: 'navy',borderRadius:8,paddingVertical:8, paddingHorizontal:15, alignItems:'center', alignSelf:'center', marginTop:hp('2%')}}
+   style={{ backgroundColor: 'navy',borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(22), alignItems:'center', alignSelf:'center', marginTop:hp('2%'), marginRight:wp('2.9%'),}}
   >
   <Text style={{color: 'white',fontWeight: 'bold' }}>Place Vehicle +</Text>
   </TouchableOpacity>
     </View>
      {item.showDetails && (
-        <View style={{marginTop: 10,}}>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Indent Start Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.indent_start_date}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Indent Closing Date: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}> {item.indent_end_date}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.vehicle_type_name}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Costing Type: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Vehicle/Tonn Count: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.number_of_vehicles}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Remaining Vehicle/Tonn to Place: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.remaining_vehicle_count}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: 15,color: 'navy',}}>Target Rate: <Text style={{fontWeight:'500',fontSize: 15,color: 'black',}}>{item.market_rate}</Text> </Text>   
+        <View style={{marginTop: hp('1%'),}}>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Indent Start Date: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.indent_start_date}</Text> </Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Indent Closing Date: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}> {item.indent_end_date}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.vehicle_type_name}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Costing Type: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Vehicle/Tonn Count: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.number_of_vehicles}</Text> </Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Remaining Vehicle/Tonn to Place: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.remaining_vehicle_count}</Text> </Text>
+      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Target Rate: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.market_rate}</Text> </Text>   
      </View>
       )}
      
     </View>
   );  
   
-    if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
+    if (loading) return <ActivityIndicator size="large" style={{ marginTop: hp('5%') }} />;
 
 
    const handleSubmit = async (item) => {
@@ -227,27 +249,13 @@ const renderIndentCard = ({ item }) => (
        console.error('❌ POST API Error:', error);
     Alert.alert('Error', 'Something went wrong while submitting the data.');
   }
-
-
-  // All validations passed ✅
-  // setShowError(false);
-
-  // Alert.alert('Vehicle Placed!');
-
-  // // Reset form
-  // setBrokerName('');
-  // setCount('');
-  // setRate('');
-  // setModalVisible(false);
 };
 
-
   return (
-
     <View style={{flex:1, marginTop: hp('0.5%'),marginLeft:wp('3%'), }}>
-    <View style={{marginHorizontal:8}}>
-    <View style={{flexDirection:'row',marginTop: hp('0.8%')}}>
-    <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 6, marginRight: wp('2%'), marginVertical: 14, width: 150, backgroundColor: '#fff' }}>
+  <View style={{marginHorizontal:scale(8)}}>
+    <View style={{flexDirection:'row',marginTop: hp('0.1%')}}>
+    <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 6, marginRight: wp('2%'), marginVertical: hp('3%'), width: wp('30%'), backgroundColor: '#fff' }}>
     <Picker
     dropdownIconColor="navy"
     selectedValue={filterType}
@@ -265,7 +273,7 @@ const renderIndentCard = ({ item }) => (
   </Picker>
 </View>
         <TextInput
-          style={{ borderWidth: 1, marginRight: wp('2%'), borderColor: '#ccc', width: 150,backgroundColor: '#fff',borderRadius: 6, marginVertical: 14, height: 53, paddingLeft: 10,fontSize:12 }}
+          style={{ borderWidth: 1, marginRight: wp('2%'), borderColor: '#ccc', width: wp('44%'),backgroundColor: '#fff',borderRadius: 6, marginVertical: hp('3%'), textAlign:'left'}}      
           placeholder={`Enter ${filterType}`}
           placeholderTextColor={'grey'}
            value={searchInput}
@@ -310,7 +318,7 @@ const renderIndentCard = ({ item }) => (
 
     setFilteredData(filtered);
   }}
-            style={{ marginTop: hp('2%'),height: 45, width: 45, borderRadius: 4, justifyContent: 'center', alignItems: 'center', backgroundColor: 'navy'}}>
+            style={{ marginTop: hp('3.5%'),height: wp('14%'), width: wp('12%'), borderRadius: wp('1%'), justifyContent: 'center', alignItems: 'center', backgroundColor: 'navy'}}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>🔍</Text>
             </TouchableOpacity>
       </View>
@@ -323,7 +331,13 @@ const renderIndentCard = ({ item }) => (
           data={filteredData}
             renderItem={renderIndentCard}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingBottom: 100 }}
+            contentContainerStyle={{ paddingBottom: hp('30%') }}
+            refreshing={refreshing}
+  onRefresh={async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  }}
         />
         </View>
       )}    
@@ -403,7 +417,7 @@ const renderIndentCard = ({ item }) => (
         </Text>
       )}
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: hp('2%') }}>
         <TouchableOpacity onPress={() => setModalVisible(false)}>
           <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
         </TouchableOpacity>

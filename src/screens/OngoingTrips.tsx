@@ -8,34 +8,22 @@ export default function IndentDatePicker() {
   const [open, setOpen] = useState(false);
 
   return (
-    <View style={{ padding: 20 }}>
-      {/* Open Calendar Button */}
-      <TouchableOpacity
-        onPress={() => setOpen(true)}
-        style={{
-          borderWidth: 1,
-          borderColor: '#999',
-          padding: 10,
-          borderRadius: 5,
-        }}
-      >
-        <Text>{moment(date).format('DD-MM-YYYY')}</Text>
-      </TouchableOpacity>
-
-      {/* Calendar Picker */}
-      <DatePicker
-        modal
-        open={open}
-        date={date}
-        mode="date"
-        onConfirm={(selectedDate) => {
-          setOpen(false);
-          setDate(selectedDate);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
-    </View>
+    //         <View>
+    //             <TextInput
+    //   placeholder="Indent Number"
+    //   value={indentNumber}
+    //   onChangeText={setIndentNumber}
+    //   editable={false} // or true if you want user to edit
+    //   style={{ borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 6 }}
+    // />
+    
+    // <TextInput
+    //   placeholder="Dummy Supplier Code"
+    //   value={supplierCode}
+    //   onChangeText={setSupplierCode}
+    //   editable={false} // or true if you want user to edit
+    //   style={{ borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 6 }}
+    // />
+    //         </View>
   );
 }
