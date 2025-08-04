@@ -1,10 +1,8 @@
-import React, {useState, useEffect, useRef}from "react";
-import {View, Text, SafeAreaView, ScrollView, TextInput,TouchableWithoutFeedback,Keyboard, Pressable, TouchableOpacity,Platform, Dimensions, ActivityIndicator, Alert, FlatList, Modal, KeyboardAvoidingView} from 'react-native'
+import React, {useState, useEffect}from "react";
+import {View, Text, SafeAreaView, TextInput, Pressable, TouchableOpacity, ActivityIndicator, Alert, FlatList, Modal} from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-const { width, height } = Dimensions.get('window');
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import DatePicker from 'react-native-date-picker';
@@ -12,7 +10,6 @@ import moment from 'moment';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
 
 export default function CreateNewIndent(){
 
@@ -46,20 +43,15 @@ const [userId, setUserId] = useState('');
 const [customerModalVisible, setCustomerModalVisible] = useState(false);
 const [searchQuery, setSearchQuery] = useState('');
 const [filteredCustomers, setFilteredCustomers] = useState([]);
-const [searchText, setSearchText] = useState('');
+const [originDropdownOpen, setOriginDropdownOpen] = useState(false);
+const [destinationDropdownOpen, setDestinationDropdownOpen] = useState(false)
 
-  const [originListVisible, setOriginListVisible] = useState(false);
-  const [vehicleType, setVehicleType] = useState('');
-
-  const [originDropdownOpen, setOriginDropdownOpen] = useState(false);
-  const [destinationDropdownOpen, setDestinationDropdownOpen] = useState(false)
-
-  useEffect(() => {
+useEffect(() => {
    const fetchUserId = async () => {
     const userData = await AsyncStorage.getItem('userData');
     if (userData) {
       const parsed = JSON.parse(userData);
-      setUserId(parsed.id); // make sure userId is in state
+      setUserId(parsed.id); 
     }
   };
   fetchUserId();
@@ -101,7 +93,7 @@ useEffect(() => {
     Authorization: `Bearer 4f9e8d81c7b4a9fdf6b3e1c8930e2a171eb3f2e6bd8d59ef821a77c3a0f4d6e8`,
   }})
       .then(response => {
-              console.log('API response1:', response.data); // 👈 ADD THIS LINE
+              console.log('API response1:', response.data); 
 
         setCustomers(response.data.data); 
                 setFilteredCustomers(response.data.data);
@@ -115,7 +107,6 @@ useEffect(() => {
     
   }, []);
 
-    // Example handler
 const handleSearch = text => {
   setSearchQuery(text);
   const filtered = customers.filter(item =>
@@ -123,9 +114,6 @@ const handleSearch = text => {
   );
   setFilteredCustomers(filtered);
 };
-
-
-
 //const API_URL_ForVehicletypeCapacity = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/getVehicleType';
     useEffect(() => {
     axios.get(API_URL_ForVehicletypeCapacity, {
@@ -139,7 +127,7 @@ const handleSearch = text => {
         setLoading(false);
       })
       .catch(error => {
-      console.error('Failed to fetch customers:', error.response?.data || error.message);
+      console.error('Failed to fetch vehcles:', error.response?.data || error.message);
         setLoading(false);
       });
   }, []);
@@ -166,7 +154,6 @@ const handleSearch = text => {
     return;
   }
   const payload = {
-    // customer_name: selectedCustomer,
     customer_name: selectedCustomer?.id, 
     indent_start_date: moment(IndentStartDate).format('DD-MM-YYYY'), 
     indent_last_date: moment(closingDate).format('DD-MM-YYYY'),
@@ -386,7 +373,7 @@ const handleSearch = text => {
   }}
    
   textInputProps={{
-    value: origin, // ✅ Keeps value in sync
+    value: origin,
     onChangeText: setOrigin,
     
   }}
@@ -399,54 +386,19 @@ const handleSearch = text => {
         debounce={300}
         minLength={2}
   styles={{
-    container: { flex: 0 },
-    textInputContainer: {
-      backgroundColor: 'transparent',
-      borderTopWidth: 0,
-      borderBottomWidth: 0,
-      marginBottom: hp('1%'),
-    },
-    textInput: {
-      marginLeft: wp('0.5%'),
-      marginRight: wp('0.5%'),
-      height: hp('4.2%'),
-      borderWidth: moderateScale(1),
-      borderColor: 'black',
-      borderRadius: moderateScale(6),
-      paddingHorizontal: 20,
-      fontSize: moderateScale(12),
-      backgroundColor: '#fff',
-    },
-    listView: {
-      zIndex:1000,
-      position: 'absolute',
-      top: hp('6%'),
-      backgroundColor: '#fff',
-      elevation: 5,
-      width: wp('100%'),
-    },
-    row: {
-      backgroundColor: '#fff',
-      padding: wp('1%'),
-      flexDirection: 'row',
-    },
-    description: {
-      color: '#000',
-    },
-  }}
-/>
+    container: { flex: 0 },textInputContainer: {backgroundColor: 'transparent',borderTopWidth: 0,borderBottomWidth: 0,marginBottom: hp('1%'),},
+    textInput: {marginLeft: wp('0.5%'),marginRight: wp('0.5%'),height: hp('4.2%'),borderWidth: moderateScale(1),borderColor: 'black',borderRadius: moderateScale(6),paddingHorizontal: 20,fontSize: moderateScale(12),backgroundColor: '#fff',},
+    listView: {zIndex:1000,position: 'absolute',top: hp('6%'),backgroundColor: '#fff',elevation: 5,width: wp('100%')},
+    row: {backgroundColor: '#fff',padding: wp('1%'),flexDirection: 'row'},
+    description: {color: '#000'}}}
+  />
 {origin !== '' && (
     <TouchableOpacity
       onPress={() => {
         setOrigin('');
         setOriginDropdownOpen(false);
       }}
-      style={{
-        position: 'absolute',
-        right: 10,
-        top: 15,
-        zIndex: 1001,
-      }}
+      style={{position: 'absolute',right: 10,top: 15,zIndex: 1001}}
     >
       <Text style={{ fontSize: 12 , color:'red'}}>❌</Text>
     </TouchableOpacity>
@@ -459,15 +411,7 @@ const handleSearch = text => {
       {destinationDropdownOpen && (
   <View
     pointerEvents="box-only"
-    style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'transparent',
-      zIndex: 9, // on top of everything
-    }}
+    style={{position: 'absolute',top: 0,left: 0,right: 0,bottom: 0,backgroundColor: 'transparent',zIndex: 9,}}
   />
 )} 
    <GooglePlacesAutocomplete
@@ -565,7 +509,7 @@ const handleSearch = text => {
             {Vehicletype.map((customer, index) => (
               <Picker.Item
                 key={index}
-                label={customer.vehicle_type}  // replace 'name' with your actual key
+                label={customer.vehicle_type}  
                 value={customer.vehicle_type}
               />
             ))}

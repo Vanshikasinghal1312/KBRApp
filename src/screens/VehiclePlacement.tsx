@@ -17,14 +17,11 @@ export default function VehiclePlacementScreen({navigation}){
   const [filterType, setFilterType] = useState(''); 
   const [searchInput, setSearchInput] = useState('');
   const [cancelledIndents, setCancelledIndents] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
-
-  
+  const [refreshing, setRefreshing] = useState(false);
 
   const token = '4f9e8d81c7b4a9fdf6b3e1c8930e2a171eb3f2e6bd8d59ef821a77c3a0f4d6e8';
   const VehiclePlacement_URL = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/vehicleplacement';
   
-
     useEffect(() => {
     VehiclePlacementFecth();
   }, []);
@@ -102,8 +99,7 @@ useFocusEffect(
 
 };
 
-
-  const renderIndentCard = ({ item }) => (
+ const renderIndentCard = ({ item }) => (
       <View style={{backgroundColor: 'white',borderRadius: scale(12), padding: moderateScale(20),marginBottom: verticalScale(16), marginRight: wp('1%'), marginLeft:hp('0.1%')}}>
         <Text style={{color:'navy',marginBottom: verticalScale(2),fontWeight: 'bold',fontSize: scale(20), textAlign:'center',textDecorationLine: 'underline'
   }}><Text style={{fontWeight: '800',fontSize:scale(20),color: 'navy'}}>{item.indent_number}</Text></Text>
@@ -125,7 +121,9 @@ useFocusEffect(
       style={{ backgroundColor: 'navy', borderRadius: moderateScale(8), paddingVertical: verticalScale(8), paddingHorizontal: scale(22), alignItems:'center', alignSelf:'center', marginTop:hp('2%'), marginRight:wp('2.9%') }}
       onPress={() => { navigation.navigate('Place VehicleForm', {
   indent_number: item.indent_number,
-  dummy_supplier_code: item.dummy_supplier_code
+  dummy_supplier_code: item.dummy_supplier_code,
+  rate: item.rate,
+  vehicle_count: item.vehicle_count
 })
         console.log('Placing vehicle for:', item.indent_number);
         // navigation.navigate('YourScreen', { item }); // Add your navigation if needed
