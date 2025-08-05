@@ -7,14 +7,12 @@ import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 export default function AvailiableIndents(){
   const [userId, setUserId] = useState('');
-const [refreshing, setRefreshing] = useState(false);
-  
-  
+const [refreshing, setRefreshing] = useState(false); 
   const [selectedIntentNumber, setSelectedIntentNumber] = useState(null);
   const [selectedCustomerName, setSelectedCustomerName] = useState(null);
   const [selectedValue, setSelectedValue] = useState('');
@@ -151,14 +149,89 @@ if (response.data?.status === "1") {
   setFilteredData(updatedFilteredData);
 };
 const renderIndentCard = ({ item }) => (
-    <View style={{backgroundColor: 'white',borderRadius: scale(12), padding: moderateScale(20),marginBottom: verticalScale(16), marginRight: wp('1%'), marginLeft:hp('0.1%')}}>
-      <Text style={{color:'navy',marginBottom: verticalScale(2),fontWeight: 'bold',fontSize: scale(20), textAlign:'center',textDecorationLine: 'underline'
-}}><Text style={{fontWeight: '800',fontSize:scale(20),color: 'navy'}}>{item.indent_number}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Customer Name:<Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}> {item.supplier_name}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Origin: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.from_location}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Destination: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.to_location}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Loading Date: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.loading_date}</Text> </Text>
-   
+    <View style={{backgroundColor: '#06244F',borderRadius: scale(12), padding: moderateScale(20),marginBottom: verticalScale(16), marginRight: wp('1%'), marginLeft:hp('0.1%')}}>
+     <View style={{
+         backgroundColor: '#00457c', 
+        paddingVertical: hp('1%'),
+        paddingHorizontal: wp('0.09%'),
+        borderTopLeftRadius: wp('3%'),
+        borderTopRightRadius: wp('3%'),
+        }}>
+          <Text style={{color:'#eec340',fontWeight: 'bold',fontSize: wp('5.5%'), marginLeft:wp('2%'),alignItems:'center',justifyContent:'center'}}><Text style={{fontWeight: 'bold',fontSize: wp('5.4%'), alignItems:'center',color:'#eec340',}}>{item.indent_number}</Text></Text>
+          </View> 
+   <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name:  <Text style={{ color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),}}> {item.supplier_name}</Text></Text>
+        <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%')}}>Loading Date:  <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),}}>{item.loading_date}</Text> </Text>    
+    
+          <View style={{
+        flexDirection: 'row',
+        marginTop: 10,
+        alignItems:'center'
+      }}>
+      
+        {/* ORIGIN */}
+        <View style={{ flex:2, alignItems: 'flex-start' }}>
+          {(() => {
+            const fromParts = item.from_location?.split(',') || [];
+            const fromMain = fromParts[0]?.trim() || '';
+            const fromRest = fromParts.slice(1).join(',').trim();
+            return (
+              <View>
+                <Text style={{ fontSize:moderateScale(13), fontWeight: 'bold', color: 'white' }}>{fromMain}</Text>
+                {fromRest !== '' && (
+                  <Text style={{ fontSize: moderateScale(10), color: 'white' }}>{fromRest}</Text>
+                )}
+              </View>
+            );
+          })()}
+        </View>
+      
+        {/* LINE + TRUCK */}
+        <View style={{ flex: 4, flexDirection: 'row', alignItems: 'center' }}>
+             <View
+          style={{
+            flex: 1,
+            borderBottomWidth: 1,
+            borderColor: 'white',
+            borderStyle: 'dotted',
+          }}
+        />
+        
+          {/* <View style={{ flex: 1, height: 1, backgroundColor: 'white', }} /> */}
+          <Icon name="truck" size={26} color="white" style={{ marginHorizontal:wp('1%') }} />
+          {/* <View style={{ flex: 1, height: 1, backgroundColor: 'white' }} /> */}
+          <View
+          style={{
+            flex: 1,
+            borderBottomWidth: 1,
+            borderColor: 'white',
+            borderStyle: 'dotted',
+          }}
+        />
+        
+        
+        </View>
+      
+        {/* DESTINATION */}
+        <View style={{ flex: 2, alignItems: 'center' }}>
+          {(() => {
+            const toParts = item.to_location?.split(',') || [];
+            const toMain = toParts[0]?.trim() || '';
+            const toRest = toParts.slice(1).join(',').trim();
+            return (
+              <View style={{ alignItems:'flex-start' }}>
+                <Text style={{ fontSize:moderateScale(13), fontWeight: 'bold', color: 'white' }}>{toMain}</Text>
+                {toRest !== '' && (
+                  <Text style={{ fontSize:moderateScale(10), color: 'white' }}>{toRest}</Text>
+                )}
+              </View>
+            );
+          })()}
+        </View>
+      
+      </View>
+      
+
+
    <View style={{flexDirection:'row', justifyContent:'space-between',marginTop: hp('1%') }}>
    
        <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{ backgroundColor: 'navy',borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(20), alignItems:'center', alignSelf:'center', marginTop:hp('2%'), marginLeft:wp('0.1%'), marginRight:wp('2%')}}>
@@ -252,7 +325,7 @@ const renderIndentCard = ({ item }) => (
 };
 
   return (
-    <View style={{flex:1, marginTop: hp('0.5%'),marginLeft:wp('3%'), }}>
+    <View style={{flex:1, backgroundColor: '#1C1C1C',padding:wp('3%'),}}>
   <View style={{marginHorizontal:scale(8)}}>
     <View style={{flexDirection:'row',marginTop: hp('0.1%')}}>
     <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 6, marginRight: wp('2%'), marginVertical: hp('3%'), width: wp('30%'), backgroundColor: '#fff' }}>

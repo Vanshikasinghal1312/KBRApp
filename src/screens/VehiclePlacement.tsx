@@ -29,9 +29,9 @@ export default function VehiclePlacementScreen({navigation}){
   useEffect(() => {
   const interval = setInterval(() => {
     VehiclePlacementFecth();
-  }, 30000); // refresh every 30 seconds (30000 ms)
+  }, 30000); 
 
-  return () => clearInterval(interval); // cleanup on unmount
+  return () => clearInterval(interval); 
 }, []);
 
   useEffect(() => {
@@ -126,7 +126,6 @@ useFocusEffect(
   vehicle_count: item.vehicle_count
 })
         console.log('Placing vehicle for:', item.indent_number);
-        // navigation.navigate('YourScreen', { item }); // Add your navigation if needed
       }}
     >
       <Text style={{color: 'white', fontWeight: 'bold'}}>Place Vehicle +</Text>
@@ -155,7 +154,7 @@ useFocusEffect(
   <View style={{marginHorizontal:scale(8)}}>
     <View style={{flexDirection:'row',marginTop: hp('0.1%')}}>
       
-       <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 6, marginRight: wp('2%'), marginVertical: hp('3%'), width: wp('30%'), backgroundColor: '#fff' }}>
+       <View style={{ borderWidth: moderateScale(1), borderColor: '#ccc', borderRadius: moderateScale(6), marginRight: wp('2%'), marginVertical: hp('3%'), width: wp('30%'), backgroundColor: '#fff' }}>
   <Picker
     dropdownIconColor="navy"
     selectedValue={filterType}

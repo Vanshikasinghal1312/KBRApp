@@ -670,6 +670,7 @@ color: 'green', marginBottom:20}}>
             placeholder=' '
             value={targetRate}
             onChangeText={setTargetRate}
+            keyboardType="numeric"
           />
         
           <Pressable  onPress={handleSubmit}>

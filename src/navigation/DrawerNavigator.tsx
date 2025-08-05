@@ -142,7 +142,7 @@ export default function DrawerNavigator() {
         options={({ navigation }) => ({
           drawerIcon: ({ color, size }) => <Icon name="cube-outline" size={size} color={color} />,
           headerTitle: 'KBR Indents',
-          headerStyle: { backgroundColor: 'navy' },
+          headerStyle: { backgroundColor: '#00457c' },
           headerTintColor: 'white',
           headerRight: () => (
             <TouchableOpacity
@@ -157,7 +157,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen
         name="Avaliable Indents" component={AvailiableIndents} options={{
           drawerIcon: ({ color, size }) => <Icon name="cube-outline" size={size} color={color} />,
-          headerStyle: { backgroundColor: 'navy' },
+          headerStyle: { backgroundColor: '#00457c' },
           headerTintColor: 'white',
         }}
       />
@@ -169,7 +169,7 @@ export default function DrawerNavigator() {
 
       <Drawer.Screen name="Vehicle Placement" component={VehiclePlacementScreen} options={{drawerIcon: ({ color, size }) => 
         <Icon name="cube-outline" size={size} color={color} />,
-          headerStyle: { backgroundColor: 'navy' },headerTintColor: 'white',
+          headerStyle: { backgroundColor: '#00457c' },headerTintColor: 'white',
         }}
       />
     </Drawer.Navigator>
