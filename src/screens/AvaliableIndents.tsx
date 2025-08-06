@@ -21,7 +21,6 @@ const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState(''); 
   const [searchInput, setSearchInput] = useState('');
-  const [showForm, setShowForm] = useState(false);
 const [selectedIndent, setSelectedIndent] = useState(null);
 const [modalVisible, setModalVisible] = useState(false);
 
@@ -149,9 +148,9 @@ if (response.data?.status === "1") {
   setFilteredData(updatedFilteredData);
 };
 const renderIndentCard = ({ item }) => (
-    <View style={{backgroundColor: '#06244F',borderRadius: scale(12), padding: moderateScale(20),marginBottom: verticalScale(16), marginRight: wp('1%'), marginLeft:hp('0.1%')}}>
+    <View style={{backgroundColor: '#06244F',borderRadius: wp('6%'), padding: wp('4%'),marginBottom: verticalScale(16), marginLeft:hp('0.1%'),overflow:'hidden'}}>
      <View style={{
-         backgroundColor: '#00457c', 
+        backgroundColor: '#00457c', 
         paddingVertical: hp('1%'),
         paddingHorizontal: wp('0.09%'),
         borderTopLeftRadius: wp('3%'),
@@ -206,9 +205,7 @@ const renderIndentCard = ({ item }) => (
             borderColor: 'white',
             borderStyle: 'dotted',
           }}
-        />
-        
-        
+        />     
         </View>
       
         {/* DESTINATION */}
@@ -230,31 +227,27 @@ const renderIndentCard = ({ item }) => (
       
       </View>
       
-
-
-   <View style={{flexDirection:'row', justifyContent:'space-between',marginTop: hp('1%') }}>
-   
-       <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{ backgroundColor: 'navy',borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(20), alignItems:'center', alignSelf:'center', marginTop:hp('2%'), marginLeft:wp('0.1%'), marginRight:wp('2%')}}>
-          <Text style={{color: 'white',fontWeight: 'bold',}}>{item.showDetails ? 'View less' : 'View more'}</Text>
-        </TouchableOpacity>
+   <View style={{flexDirection:'row', justifyContent:'space-between' }}>
+   <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{ backgroundColor: '#eec340',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal: wp('4.5%'),marginTop:hp('2%'), marginRight:wp('1.5%')}}>
+             <Text style={{color: 'black',fontWeight: 'bold', fontSize: wp('3.2%') }}>{item.showDetails ? 'View less' : 'View more ▼'}</Text>
+           </TouchableOpacity>
      <TouchableOpacity  onPress={() => {
     setSelectedIndent(item);
     setModalVisible(true);
   }}
-   style={{ backgroundColor: 'navy',borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(22), alignItems:'center', alignSelf:'center', marginTop:hp('2%'), marginRight:wp('2.9%'),}}
-  >
-  <Text style={{color: 'white',fontWeight: 'bold' }}>Place Vehicle +</Text>
+    style={{backgroundColor: '#df4444',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4%'), marginTop:hp('2%'), marginRight:wp('4%')}}>  
+  <Text style={{color: 'white',fontWeight: 'bold', fontSize: wp('3.2%') }}>Place Vehicle +</Text>
   </TouchableOpacity>
     </View>
      {item.showDetails && (
         <View style={{marginTop: hp('1%'),}}>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Indent Start Date: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.indent_start_date}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Indent Closing Date: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}> {item.indent_end_date}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Vehicle Type: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.vehicle_type_name}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Costing Type: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Vehicle/Tonn Count: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.number_of_vehicles}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Remaining Vehicle/Tonn to Place: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.remaining_vehicle_count}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Target Rate: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.market_rate}</Text> </Text>   
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Start Date: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.indent_start_date}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Closing Date: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}> {item.indent_end_date}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.vehicle_type_name}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Costing Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.number_of_vehicles}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Remaining Vehicle/Tonn to Place: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.remaining_vehicle_count}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Target Rate: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.market_rate}</Text> </Text>   
      </View>
       )}
      
@@ -328,17 +321,22 @@ const renderIndentCard = ({ item }) => (
     <View style={{flex:1, backgroundColor: '#1C1C1C',padding:wp('3%'),}}>
   <View style={{marginHorizontal:scale(8)}}>
     <View style={{flexDirection:'row',marginTop: hp('0.1%')}}>
-    <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 6, marginRight: wp('2%'), marginVertical: hp('3%'), width: wp('30%'), backgroundColor: '#fff' }}>
+       <View style={{ borderWidth: 1, borderColor: 'white', borderRadius:moderateScale(6), marginRight: wp('2%'),marginVertical: hp('1.5%'), width: wp('30%'), height: hp('5%'), backgroundColor: 'black',  justifyContent: 'center'}}>
     <Picker
-    dropdownIconColor="navy"
-    selectedValue={filterType}
-    onValueChange={(itemValue) => {
-      setFilterType(itemValue);
-      setSelectedIntentNumber(null);
-      setSelectedCustomerName(null);
-      setSearchInput('');
-      setFilteredData(data); 
-    }}
+    dropdownIconColor="white"
+        selectedValue={filterType}
+        onValueChange={(itemValue) => {
+          setFilterType(itemValue);
+          setSelectedIntentNumber(null);
+          setSelectedCustomerName(null);
+          setSearchInput('');
+          setFilteredData(data); 
+        }}
+        style={{
+        height: hp('1%'),  // Reduce height
+        color: 'white',      // Set selected text color
+        fontSize: wp('3.5%'),
+      }}
     >
     <Picker.Item label="Select" value="" />
     <Picker.Item label="Indent Number" value="Indent Number" />
@@ -346,8 +344,8 @@ const renderIndentCard = ({ item }) => (
   </Picker>
 </View>
         <TextInput
-          style={{ borderWidth: 1, marginRight: wp('2%'), borderColor: '#ccc', width: wp('44%'),backgroundColor: '#fff',borderRadius: 6, marginVertical: hp('3%'), textAlign:'left'}}      
-          placeholder={`Enter ${filterType}`}
+          style={{ borderWidth: moderateScale(1), marginRight: wp('2%'), borderColor: 'white', width: wp('44%'), height:hp('5%'),backgroundColor:'#424244',borderRadius: 6, marginVertical: hp('1.5%'), textAlign:'left'}}      
+          placeholder={`Search ${filterType}`}
           placeholderTextColor={'grey'}
            value={searchInput}
   onChangeText={setSearchInput}
@@ -391,7 +389,7 @@ const renderIndentCard = ({ item }) => (
 
     setFilteredData(filtered);
   }}
-            style={{ marginTop: hp('3.5%'),height: wp('14%'), width: wp('12%'), borderRadius: wp('1%'), justifyContent: 'center', alignItems: 'center', backgroundColor: 'navy'}}>
+          style={{ marginTop: hp('1.6%'), width: wp('12%'),height:hp('4.8%'), borderRadius: wp('1%'), justifyContent: 'center', alignItems: 'center', backgroundColor: '#06244F',borderColor: 'white',borderWidth:1 }}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>🔍</Text>
             </TouchableOpacity>
       </View>
@@ -429,7 +427,7 @@ const renderIndentCard = ({ item }) => (
   }}>
     <View style={{
       width: '90%',
-      backgroundColor: '#fff',
+      backgroundColor: '#151515',
       borderRadius: 12,
       padding: 20,
       shadowColor: '#000',
@@ -438,15 +436,22 @@ const renderIndentCard = ({ item }) => (
       shadowRadius: 5,
       elevation: 5
     }}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 15 }}>
-        Add Broker Pricing {selectedIndent?.indent_number}
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 15, color:'#ffffff' }}>
+        Add Broker Pricing - {selectedIndent?.indent_number}
       </Text>
 
-<View style={{borderWidth:1, borderColor:'darkgray', borderRadius:8, marginBottom:12, padding:0.1}}>
+<View style={{borderWidth:1, borderColor:'darkgray', borderRadius:8, marginBottom:12, padding:hp('0.1%'),backgroundColor:'#313131'}}>
   <Picker
   selectedValue={brokerName}
   onValueChange={(item)=>setBrokerName(item)}
-  dropdownIconColor='navy'
+  dropdownIconColor='#989898'
+  style={{
+            height: hp('5%'),  // Reduce height
+            color: '#989898',      // Set selected text color
+            fontSize: wp('4.2%'),
+            textAlign:'center',
+            
+          }}
   >
         <Picker.Item label="select Broker" value=''/>
 
@@ -468,7 +473,8 @@ const renderIndentCard = ({ item }) => (
             setCount(text);
           }}
           keyboardType="numeric"
-         style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding: 10,marginBottom: 12}}
+         style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding: hp('1%'),marginBottom: 12, backgroundColor:'#313131'}}
+         placeholderTextColor={'#989898'}
       />
       <TextInput
         placeholder="Total Rate"
@@ -480,8 +486,12 @@ const renderIndentCard = ({ item }) => (
             }
             setRate(text);
           }}        
-          keyboardType="numeric"
-        style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding: 10,marginBottom: 12}}
+        keyboardType="numeric"
+        style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding:hp('1%'),marginBottom: 12, backgroundColor:'#313131'}}
+        placeholderTextColor={'#989898'}
+        
+        
+
       />
 
       {showError && (
@@ -492,11 +502,11 @@ const renderIndentCard = ({ item }) => (
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: hp('2%') }}>
         <TouchableOpacity onPress={() => setModalVisible(false)}>
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
+          <Text style={{ color: '#df4444', fontWeight: 'bold',fontSize:moderateScale(15)}}>Cancel</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => handleSubmit(selectedIndent)}>
-          <Text style={{ color: 'navy', fontWeight: 'bold' }}>Submit</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold', fontSize:moderateScale(15) }}>Submit</Text>
         </TouchableOpacity>
       </View>
     </View>

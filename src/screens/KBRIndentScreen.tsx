@@ -167,20 +167,12 @@ useEffect(() => {
 
    const renderIndentCard = ({ item }) => ( 
     <View style={{ backgroundColor: '#06244F',borderRadius: wp('6%'),padding: wp('4%'),marginBottom: verticalScale(16),overflow:'hidden'}}> 
-    <View style={{
-     backgroundColor: '#00457c', 
-    paddingVertical: hp('1%'),
-    paddingHorizontal: wp('0.09%'),
-    borderTopLeftRadius: wp('3%'),
-    borderTopRightRadius: wp('3%'),
-    }}>
+    <View style={{backgroundColor: '#00457c', paddingVertical: hp('1%'),paddingHorizontal: wp('0.09%'),borderTopLeftRadius: wp('3%'),borderTopRightRadius: wp('3%')}}>
       <Text style={{color:'#eec340',fontWeight: 'bold',fontSize: wp('5.5%'), marginLeft:wp('2%'),alignItems:'center',justifyContent:'center'}}><Text style={{
-  color: item.cancelled || item.status === '1' || item.status === 1 ? '#df4444' : '#eec340',fontWeight: 'bold',fontSize: wp('5.4%'), alignItems:'center'
-}}>
+  color: item.cancelled || item.status === '1' || item.status === 1 ? '#df4444' : '#eec340',fontWeight: 'bold',fontSize: wp('5.2%'), alignItems:'center'}}>
   {item.indent_number}
   {(item.cancelled || item.status === '1' || item.status === 1) && '- Cancelled'}
 </Text>
-
 </Text>
 </View>
       <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name:  <Text style={{ color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),}}> {item.supplier_name}</Text></Text>

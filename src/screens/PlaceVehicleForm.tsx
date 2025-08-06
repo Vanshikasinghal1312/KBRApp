@@ -8,7 +8,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('window');
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function HomeScreen() {
+export default function VehiclePlacementScreen() {
  const route = useRoute();
 const { indent_number, dummy_supplier_code } = route.params;
 const { rate, vehicle_count } = route.params || {};

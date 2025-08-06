@@ -5,26 +5,23 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('window');
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 export default function THCApprovalScreen({navigation}){
   const [selectedIntentNumber, setSelectedIntentNumber] = useState(null);
   const [selectedCustomerName, setSelectedCustomerName] = useState(null);
-  const [selectedValue, setSelectedValue] = useState('');
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState(''); 
   const [searchInput, setSearchInput] = useState('');
   const [cancelledIndents, setCancelledIndents] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
-
-  
+  const [refreshing, setRefreshing] = useState(false);
 
   const token = '4f9e8d81c7b4a9fdf6b3e1c8930e2a171eb3f2e6bd8d59ef821a77c3a0f4d6e8';
   const THC_APPROVAL_URL = 'https://kbrtransways.com/testing/tms/tms_api2/index.php/thc_approval_list';
-  
 
     useEffect(() => {
     THCApproval();
@@ -153,24 +150,73 @@ const handleReject = (id) => {
   handleStatusUpdate(id, 'reject','Reject');
 };
 
-   const renderIndentCard = ({ item }) => (
-    
-    <View style={{backgroundColor: 'white', borderRadius: moderateScale(12),padding: moderateScale(20),marginBottom: verticalScale(16),elevation: 3, marginRight: wp('1%'), marginLeft:hp('0.1%')}}> 
-   
-      <Text style={{color:'navy',marginBottom: verticalScale(2),fontWeight: 'bold',fontSize: scale(20), textAlign:'center',textDecorationLine: 'underline'}}><Text style={{
-  color: item.cancelled || item.status === '1' || item.status === 1 ? 'red' : 'navy',
- marginBottom: verticalScale(2),fontWeight: 'bold',fontSize: scale(20),textAlign: 'center',textDecorationLine: 'underline'
-}}>
-  {item.indent_number}
-  {(item.cancelled || item.status === '1' || item.status === 1) && '- Cancelled'}
-</Text>
-</Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>THC Date:<Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}> {item.thc_date}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Vehicel Number: <Text style={{fontWeight:'500',fontSize:scale(14),color: 'black',}}>{item.vehicle_number}</Text></Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Vendor Name: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.vendor_name}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Origin: <Text style={{fontWeight:'500',fontSize:scale(14) ,color: 'black',}}>{item.from_location}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Destination: <Text style={{fontWeight:'500',fontSize:scale(14) ,color: 'black',}}>{item.to_location}</Text> </Text>
-      <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Contract amount : <Text style={{fontWeight:'500',fontSize:scale(14) ,color: 'black',}}>{item.contract_amount}</Text> </Text>
+   const renderIndentCard = ({ item }) => (  
+    <View style={{ backgroundColor: '#06244F',borderRadius: wp('6%'),padding: wp('4%'),marginBottom: verticalScale(16),overflow:'hidden', marginRight: wp('1%'), marginLeft:hp('0.1%')}}>    
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>THC Date:<Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}> {item.thc_date}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Vehicel Number: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.vehicle_number}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Vendor Name: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.vendor_name}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Contract amount : <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.contract_amount}</Text> </Text>
+
+<View style={{flexDirection: 'row',marginTop: hp('3%'),alignItems:'center'}}>
+  <View style={{ flex:2, alignItems: 'flex-start' }}>
+    {(() => {
+      const fromParts = item.from_location?.split(',') || [];
+      const fromMain = fromParts[0]?.trim() || '';
+      const fromRest = fromParts.slice(1).join(',').trim();
+      return (
+        <View>
+          <Text style={{ fontSize:moderateScale(13), fontWeight: 'bold', color: 'white' }}>{fromMain}</Text>
+          {fromRest !== '' && (
+            <Text style={{ fontSize: moderateScale(10), color: 'white' }}>{fromRest}</Text>
+          )}
+        </View>
+      );
+    })()}
+  </View>
+  {/* LINE + TRUCK */}
+  <View style={{ flex: 4, flexDirection: 'row', alignItems: 'center' }}>
+       <View
+    style={{
+      flex: 1,
+      borderBottomWidth: 1,
+      borderColor: 'white',
+      borderStyle: 'dotted',
+    }}
+  />
+  
+    {/* <View style={{ flex: 1, height: 1, backgroundColor: 'white', }} /> */}
+    <Icon name="truck" size={26} color="white" style={{ marginHorizontal:wp('1%') }} />
+    {/* <View style={{ flex: 1, height: 1, backgroundColor: 'white' }} /> */}
+    <View
+    style={{
+      flex: 1,
+      borderBottomWidth: 1,
+      borderColor: 'white',
+      borderStyle: 'dotted',
+    }}
+  />
+  
+  
+  </View>
+
+  {/* DESTINATION */}
+  <View style={{ flex: 2, alignItems: 'center' }}>
+    {(() => {
+      const toParts = item.to_location?.split(',') || [];
+      const toMain = toParts[0]?.trim() || '';
+      const toRest = toParts.slice(1).join(',').trim();
+      return (
+        <View style={{ alignItems:'flex-start' }}>
+          <Text style={{ fontSize:moderateScale(13), fontWeight: 'bold', color: 'white' }}>{toMain}</Text>
+          {toRest !== '' && (
+            <Text style={{ fontSize:moderateScale(10), color: 'white' }}>{toRest}</Text>
+          )}
+        </View>
+      );
+    })()}
+  </View>
+
+</View>
 
      
      <View style={{flexDirection:'row', justifyContent:'space-between'}}>
@@ -178,21 +224,20 @@ const handleReject = (id) => {
  onPress={() => {
      const thcLink = `https://kbrtransways.com/testing/tms/admin/view_thc3.php?trip_id=${item.id}`;
      navigation.navigate('THC View', { link: thcLink });
-   }}       style={{ backgroundColor: 'navy',borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(8), marginTop:hp('2%'), marginRight:wp('1%')}}>
-          <Text style={{color: 'white',fontWeight: 'bold',}}>{item.showDetails ? 'View less' : 'View more'}</Text>
+   }}      
+  style={{backgroundColor: '#eec340',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal: wp('4.5%'),marginTop:hp('2%'), marginRight:wp('1.5%')}}>
+          <Text style={{color: 'black',fontWeight: 'bold', fontSize: wp('3.2%')}}>{item.showDetails ? 'View less' : 'View more'}</Text>
         </TouchableOpacity>
   <TouchableOpacity
     onPress={() => HandleApprove(item.id)}
-    style={{ backgroundColor: 'green',borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(16), marginTop:hp('2%'),marginRight:wp('1%')}}
-  >
-    <Text style={{ color: 'white', fontWeight: 'bold' }}>Approve</Text>
+    style={{backgroundColor: 'green',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('4%')}}>
+    <Text style={{color: 'white',fontWeight: 'bold', fontSize: wp('3.2%')}}>Approve</Text>
   </TouchableOpacity>
 
   <TouchableOpacity
     onPress={() => handleReject(item.id)}
-    style={{ backgroundColor: 'red', borderRadius: moderateScale(8),paddingVertical: verticalScale(8),paddingHorizontal: scale(16), marginTop:hp('2%'),marginRight:wp('1.5%')}}
-  >
-    <Text style={{ color: 'white', fontWeight: 'bold' }}>Reject</Text>
+    style={{backgroundColor: '#df4444',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('4%')}}>
+    <Text style={{color: 'white',fontWeight: 'bold', fontSize: wp('3.2%')}}>Reject</Text>
   </TouchableOpacity>
           
   </View>
@@ -201,21 +246,26 @@ const handleReject = (id) => {
   );  
     if (loading) return <ActivityIndicator size="large" style={{ marginTop: hp('5%') }} />;
   return (
-    <View style={{flex:1, marginTop: hp('0.5%'),marginLeft:wp('3%'), }}>
+    <View style={{flex:1, backgroundColor: '#1C1C1C',padding:wp('3%'),}}>
   <View style={{marginHorizontal:scale(8)}}>
     <View style={{flexDirection:'row',marginTop: hp('0.1%')}}>
       
-       <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 6, marginRight: wp('2%'), marginVertical: hp('3%'), width: wp('30%'), backgroundColor: '#fff' }}>
+       <View style={{ borderWidth: 1, borderColor: 'white', borderRadius:moderateScale(6), marginRight: wp('2%'),marginVertical: hp('1.5%'), width: wp('30%'), height: hp('5%'), backgroundColor: 'black',  justifyContent: 'center'}}>
   <Picker
-    dropdownIconColor="navy"
-    selectedValue={filterType}
-    onValueChange={(itemValue) => {
-      setFilterType(itemValue);
-      setSelectedIntentNumber(null);
-      setSelectedCustomerName(null);
-      setSearchInput('');
-      setFilteredData(data); 
-    }}
+     dropdownIconColor="white"
+           selectedValue={filterType}
+           onValueChange={(itemValue) => {
+             setFilterType(itemValue);
+             setSelectedIntentNumber(null);
+             setSelectedCustomerName(null);
+             setSearchInput('');
+             setFilteredData(data); 
+           }}
+           style={{
+           height: hp('1%'),  // Reduce height
+           color: 'white',      // Set selected text color
+           fontSize: wp('3.5%'),
+         }}
   >
     <Picker.Item label="Select" value="" />
     <Picker.Item label="Indent Number" value="Indent Number" />
@@ -223,8 +273,8 @@ const handleReject = (id) => {
   </Picker>
 </View>
         <TextInput
-          style={{ borderWidth: 1, marginRight: wp('2%'), borderColor: '#ccc', width: wp('44%'),backgroundColor: '#fff',borderRadius: 6, marginVertical: hp('3%'), textAlign:'left'}}      
-          placeholder={`Enter ${filterType}`}
+          style={{ borderWidth: moderateScale(1), marginRight: wp('2%'), borderColor: 'white', width: wp('44%'), height:hp('5%'),backgroundColor:'#424244',borderRadius: 6, marginVertical: hp('1.5%'), textAlign:'left'}}      
+          placeholder={`Search ${filterType}`}
           placeholderTextColor={'grey'}
            value={searchInput}
   onChangeText={setSearchInput}
@@ -268,7 +318,7 @@ const handleReject = (id) => {
 
     setFilteredData(filtered);
   }}
-            style={{ marginTop: hp('3.5%'),height: wp('14%'), width: wp('12%'), borderRadius: wp('1%'), justifyContent: 'center', alignItems: 'center', backgroundColor: 'navy'}}>
+            style={{ marginTop: hp('1.6%'), width: wp('12%'),height:hp('4.8%'), borderRadius: wp('1%'), justifyContent: 'center', alignItems: 'center', backgroundColor: '#06244F',borderColor: 'white',borderWidth:1 }}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>🔍</Text>
             </TouchableOpacity>
       </View>

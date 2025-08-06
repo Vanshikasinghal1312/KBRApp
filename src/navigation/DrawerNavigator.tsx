@@ -25,19 +25,26 @@ const CustomDrawer = (props) => {
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.logoContainer}>
+      <View>
+      <View style={{alignItems: 'center',paddingVertical: 15,borderBottomColor: 'white',borderBottomWidth: 0.3,}}>
         <Image
           source={require('../assets/image/logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
       </View>
+    </View>
+
 
       {/* Visible Drawer Items */}
-      <TouchableOpacity onPress={() => navigation.navigate('Home Screen')} style={styles.drawerItem}>
+      <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} style={styles.drawerItem1}>
         <Icon name="home-outline" size={22} color="white" style={styles.icon} />
-        <Text style={styles.drawerText}>Home Screen</Text>
+        <Text style={styles.drawerText}>Dashboard</Text>
       </TouchableOpacity>
+
+      <View style={{borderColor: '#87CEEB',borderRadius:10,paddingHorizontal:40,paddingVertical: 6,alignSelf: 'flex-start', marginLeft: 15,marginTop: 10, marginBottom:1,backgroundColor:'#0079c0'}}>
+  <Text style={{ color: '#fefeff', fontSize: 12, fontWeight: 'bold' }}>Operations Team</Text>
+</View>
 
       <TouchableOpacity onPress={() => navigation.navigate('KBR Indents')} style={styles.drawerItem}>
         <Icon name="cube-outline" size={22} color="white" style={styles.icon} />
@@ -65,10 +72,10 @@ const CustomDrawer = (props) => {
             <Icon name="cube-outline" size={18} color="white" style={styles.icon} />
             <Text style={styles.drawerText}>THC Approval</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('BFC Approval')} style={styles.subItem}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('BFC Approval')} style={styles.subItem}>
             <Icon name="cube-outline" size={18} color="white" style={styles.icon} />
             <Text style={styles.drawerText}>BFC Approval</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       )}
 
@@ -76,50 +83,27 @@ const CustomDrawer = (props) => {
         <Icon name="cube-outline" size={22} color="white" style={styles.icon} />
         <Text style={styles.drawerText}>Vehicle Placement</Text>
       </TouchableOpacity>
+      
     </DrawerContentScrollView>
   );
 };
 
 const styles = {
-  logoContainer: {
-    alignItems: 'center',
-    paddingVertical: 2,
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    marginBottom: 6,
-  },
-  logo: {
-    width: 180,
-    height: 60,
-  },
-  drawerItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingLeft: 15,
-  },
-  subMenu: {
-    paddingLeft: 40,
-  },
-  subItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  drawerText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
+  logoContainer: {alignItems: 'center',paddingVertical: 2,borderBottomColor: 'white',borderBottomWidth: 1,marginBottom: 6},
+  logo: {width: 180,height: 60},
+  drawerItem: {flexDirection: 'row',alignItems: 'center',paddingVertical: 12,paddingLeft:50,},
+    drawerItem1: {flexDirection: 'row',alignItems: 'center',paddingVertical: 12,paddingLeft: 50, marginTop:12,},
+
+  subMenu: {paddingLeft: 40},
+  subItem: {flexDirection: 'row',alignItems: 'center',paddingVertical: 10},
+  icon: {marginRight: 10},
+  drawerText: {color: 'white',fontSize: 14,fontWeight: 'bold'},
 };
 
 export default function DrawerNavigator() {
   return (
     <Drawer.Navigator
-      initialRouteName="Home Screen"
+      initialRouteName="Dashboard"
       drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
         drawerStyle: { backgroundColor: '#00457c', width: 300 },
@@ -128,7 +112,7 @@ export default function DrawerNavigator() {
       }}
     >
       <Drawer.Screen
-        name="Home Screen"
+        name="Dashboard"
         component={HomeScreen}
         options={{
           drawerIcon: ({ color, size }) => <Icon name="home-outline" size={size} color={color} />,
@@ -161,11 +145,10 @@ export default function DrawerNavigator() {
           headerTintColor: 'white',
         }}
       />
-
       <Drawer.Screen name="Admin Approval" component={AdminApproval} options={{ drawerItemStyle: { display: 'none' } }} />
-      <Drawer.Screen name="Vehicle Approval" component={VehicleApprovalScreen} options={{ drawerItemStyle: { display: 'none' } }} />
+      <Drawer.Screen name="Vehicle Approval" component={VehicleApprovalScreen} options={{ drawerItemStyle:{display: 'none' },headerStyle:{backgroundColor: '#00457c' },headerTintColor:'white'}} />
       <Drawer.Screen name="THC Approval" component={THCApprovalScreen} options={{ drawerItemStyle: { display: 'none' } }} />
-      <Drawer.Screen name="BFC Approval" component={BHCApprovalScreen} options={{ drawerItemStyle: { display: 'none' } }} />
+      {/* <Drawer.Screen name="BFC Approval" component={BHCApprovalScreen} options={{ drawerItemStyle: { display: 'none' } }} /> */}
 
       <Drawer.Screen name="Vehicle Placement" component={VehiclePlacementScreen} options={{drawerIcon: ({ color, size }) => 
         <Icon name="cube-outline" size={size} color={color} />,

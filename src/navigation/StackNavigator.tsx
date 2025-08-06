@@ -15,7 +15,7 @@ export default function StackNavigator(){
         <Stack.Screen name="AuthLoadingScreen" component={AuthLoadingScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Login Screen' component={LoginScreen} options={{headerStyle: {backgroundColor: 'navy'},headerTintColor: 'white',headerShown: false}} />
         <Stack.Screen name="MainApp" component={DrawerNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name="Create New Indent" component={CreateNewIndent} options={{headerStyle: {backgroundColor: 'navy'},headerTintColor: 'white',}}  />
+        <Stack.Screen name="Create New Indent" component={CreateNewIndent} options={{headerStyle: {backgroundColor: '#313131'},headerTintColor: 'white',}}  />
         <Stack.Screen name="THC View" component={THCWebViewScreen} options={{ title: 'View THC Details' }} />      
         <Stack.Screen name="Place VehicleForm" component={PlaceVehicleForm} />
 
