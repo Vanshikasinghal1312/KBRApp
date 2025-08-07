@@ -70,7 +70,6 @@ useEffect(() => {
         Authorization: `Bearer ${token}`,
       }
     })
-    // console.log('API response:', res.data);
     const indents = res?.data?.data || [];
     const stored = await AsyncStorage.getItem('cancelledIndents');
     const cancelledList = stored ? JSON.parse(stored) : [];
@@ -107,7 +106,6 @@ useEffect(() => {
             });
 
             if (response.data?.status === '1') {
-              // Mark it as cancelled in local state
               const updatedData = data.map(item =>
                 item.id === indentId
                   ? { ...item, cancelled: true, status:'1' }
@@ -175,8 +173,8 @@ useEffect(() => {
 </Text>
 </Text>
 </View>
-      <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name:  <Text style={{ color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),}}> {item.supplier_name}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%')}}>Loading Date:  <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),}}>{item.loading_date}</Text> </Text>    
+      <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name: <Text style={{ color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}> {item.supplier_name}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%')}}>Loading Date:  <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.loading_date}</Text> </Text>    
   
 {/* <View style={{ flexDirection: 'row', justifyContent: 'center',  marginTop: 10, paddingHorizontal: 8}}>
   <Text 
@@ -198,7 +196,7 @@ useEffect(() => {
 
     <View style={{
   flexDirection: 'row',
-  marginTop: 10,
+  marginTop:hp('2%'),
   alignItems:'center'
 }}>
 
@@ -224,7 +222,7 @@ useEffect(() => {
        <View
     style={{
       flex: 1,
-      borderBottomWidth: 1,
+      borderBottomWidth: moderateScale(1),
       borderColor: 'white',
       borderStyle: 'dotted',
     }}
@@ -236,7 +234,7 @@ useEffect(() => {
     <View
     style={{
       flex: 1,
-      borderBottomWidth: 1,
+      borderBottomWidth: moderateScale(1),
       borderColor: 'white',
       borderStyle: 'dotted',
     }}
@@ -279,18 +277,18 @@ useEffect(() => {
   </View>   
      {item.showDetails && (
         <View style={{marginTop:hp('1%'),}}>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Start Date:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.indent_start_date}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Closing Date:  <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}> {item.indent_end_date}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle Type:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.vehicle_type_name}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Costing Type:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.number_of_vehicles}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Total Indent Amount:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.indent_amount}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Advance Payment:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.advance_amount}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Start Date:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.indent_start_date}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Closing Date:  <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}> {item.indent_end_date}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle Type:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.vehicle_type_name}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Costing Type:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.number_of_vehicles}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Total Indent Amount:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.indent_amount}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Advance Payment:   <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.advance_amount}</Text> </Text>
      </View>
       )}
     </View>
   );  
-    if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
+    if (loading) return <ActivityIndicator size="large" style={{ marginTop: hp('4%') }} />;
   return (
     <View style={{flex:1, backgroundColor: '#1C1C1C',padding:wp('3%'),}}>
   <View style={{marginHorizontal:scale(8)}}>
@@ -370,7 +368,12 @@ useEffect(() => {
     </View>   
     {loading ? (
         <ActivityIndicator size="large" color="green" />
-      ) : (
+      ) : filteredData.length === 0 ? (
+        <View style={{ alignItems: 'center', marginTop: hp('15%') }}>
+          <Icon name="folder-open" size={wp('25%')} color="#999" />
+          <Text style={{color: 'white',fontSize: wp('5%'),fontWeight: 'bold',marginTop: hp('2%')}}>No Data Found</Text>
+        </View>
+      ): (
         <View>
         <FlatList
           data={filteredData}

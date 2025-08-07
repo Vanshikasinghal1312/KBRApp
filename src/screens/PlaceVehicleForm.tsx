@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Alert,Pressable,SafeAreaView, ScrollView,Text,TextInput, TouchableOpacity, View ,Dimensions,Modal,FlatList} from 'react-native';
+import { Alert,Pressable,SafeAreaView, ScrollView,Text,TextInput, TouchableOpacity, View ,Dimensions,Modal,FlatList, ImageBackground} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
@@ -262,6 +262,9 @@ const handleStartTrip = async (index, id) => {
 
 
   return (
+    <ImageBackground style={{ flex: 1 }} resizeMode='cover' 
+          source={require('../assets/image/background.png')}    
+        >
     <SafeAreaView>
       <ScrollView showsVerticalScrollIndicator={false} style={{  marginHorizontal: wp('4%'),marginTop: hp('3%'),  }}>
         {placedVehicles.length > 0 && (
@@ -296,27 +299,27 @@ const handleStartTrip = async (index, id) => {
 )}
 
         <View style={{  borderWidth: wp('0.25%'), borderColor: 'grey',borderRadius: wp('1.25%'), padding: wp('2.5%'), }}>
-        <Text style={{ fontWeight: '600', fontSize: moderateScale(14) }}>Indent Number <Text style={{ color: 'red' }}>*</Text></Text>
+        <Text style={{ fontWeight: '600', fontSize: moderateScale(14), color:'#f5fbfb'}}>Indent Number <Text style={{ color: 'red' }}>*</Text></Text>
    
          <TextInput
           placeholder="Indent Number"
           value={indentNumber}
           onChangeText={setIndentNumber}
           editable={false} 
-          style={{  borderWidth: wp('0.25%'), marginBottom: hp('1%'),padding: wp('1.5%'),borderRadius: wp('1.5%'), backgroundColor:'lightgray',fontSize: moderateScale(12), color:'black'}}
+          style={{  borderWidth: wp('0.25%'), marginBottom: hp('1%'),padding: wp('1.5%'),borderRadius: wp('1.5%'), backgroundColor:'#00457c',fontSize: moderateScale(12), color:'#f5fbfb'}}
           />
           <TextInput
             placeholder="Dummy Supplier Code"
             value={supplierCode}
             onChangeText={setSupplierCode}
             editable={false} 
-            style={{borderWidth: wp('0.25%'), marginBottom: hp('1%'),padding: wp('1.5%'),borderRadius: wp('1.5%'),backgroundColor:'lightgray',fontSize: moderateScale(12), color:'black' }}
+            style={{borderWidth: wp('0.25%'), marginBottom: hp('1%'),padding: wp('1.5%'),borderRadius: wp('1.5%'),backgroundColor:'#00457c',fontSize: moderateScale(12), color:'#f5fbfb' }}
            />
           
-          <Text style={{ fontWeight: '600', fontSize: moderateScale(14),marginTop: hp('0.5%'), marginBottom:hp('0.8%')}}>Vendor Name <Text style={{ color: 'red' }}>*</Text></Text>
+          <Text style={{ fontWeight: '600', fontSize: moderateScale(14),marginTop: hp('0.5%'), marginBottom:hp('0.8%'), color:'#f5fbfb'}}>Vendor Name <Text style={{ color: 'red' }}>*</Text></Text>
             <TouchableOpacity onPress={() => setVendorModalVisible(true)}
-             style={{ borderWidth: wp('0.25%'), padding: wp('2%'), marginBottom: hp('0.5%'), borderRadius: moderateScale(5) }}>
-            <Text style={{fontSize:moderateScale(12)}}> {selectedVendorDisplay || 'Select Vendor'}</Text> 
+             style={{ borderWidth: wp('0.25%'), padding: wp('2%'), marginBottom: hp('0.5%'), borderRadius: moderateScale(5),backgroundColor:'#00457c', }}>
+            <Text style={{fontSize:moderateScale(12), color:'#fdfdfd'}}> {selectedVendorDisplay || 'Select Vendor'}</Text> 
          </TouchableOpacity>
          <Modal visible={vendorModalVisible} animationType="slide">
            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -371,12 +374,12 @@ const handleStartTrip = async (index, id) => {
            </SafeAreaView>
          </Modal>
 
-          <Text style={{ fontWeight: '600', fontSize: moderateScale(14),marginTop: hp('0.8%'), marginBottom:hp('0.8%')}}>Vehicle Number<Text style={{ color: 'red' }}>*</Text></Text>
+          <Text style={{ fontWeight: '600', fontSize: moderateScale(14),marginTop: hp('0.8%'), marginBottom:hp('0.8%'), color:'#f5fbfb'}}>Vehicle Number<Text style={{ color: 'red' }}>*</Text></Text>
                    <TouchableOpacity
            onPress={() => setVehicleModalVisible(true)}
-           style={{  borderWidth: wp('0.25%'),padding: wp('2%'), marginBottom: hp('0.5%'), borderRadius: moderateScale(5) }}
+           style={{  borderWidth: wp('0.25%'),padding: wp('2%'), marginBottom: hp('0.5%'), borderRadius: moderateScale(5),backgroundColor:'#00457c', }}
          >
-            <Text style={{fontSize:moderateScale(12)}}>{selectedVehicle?.vehicle_number || 'Select Vehicle Number'}</Text> 
+            <Text style={{fontSize:moderateScale(12), color:'#fdfdfd'}}>{selectedVehicle?.vehicle_number || 'Select Vehicle Number'}</Text> 
          </TouchableOpacity>
          <Modal visible={vehicleModalVisible} animationType="slide">
            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -435,15 +438,15 @@ const handleStartTrip = async (index, id) => {
 
 
 
-          <Text style={{ fontWeight: '600', fontSize: moderateScale(14),marginTop: hp('0.8%'), marginBottom:hp('0.8%')}}>Driver Name <Text style={{ color: 'red' }}>*</Text></Text>
+          <Text style={{ fontWeight: '600', fontSize: moderateScale(14),marginTop: hp('0.8%'), marginBottom:hp('0.8%'), color:'#f5fbfb'}}>Driver Name <Text style={{ color: 'red' }}>*</Text></Text>
                    <TouchableOpacity
            onPress={() => setDriverModalVisible(true)}
-           style={{borderWidth: wp('0.25%'),padding: wp('2%'), marginBottom: hp('0.5%'), borderRadius: moderateScale(5) }}
+           style={{borderWidth: wp('0.25%'),padding: wp('2%'), marginBottom: hp('0.5%'), borderRadius: moderateScale(5),backgroundColor:'#00457c', }}
          >
-            <Text style={{fontSize:moderateScale(12)}}>{selectedDriver?.driver_name || 'Select Driver'}</Text> 
+            <Text style={{fontSize:moderateScale(12),color:'#fdfdfd'}}>{selectedDriver?.driver_name || 'Select Driver'}</Text> 
          </TouchableOpacity>
          <Modal visible={driverModalVisible} animationType="slide">
-           <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+           <SafeAreaView style={{ flex: 1,  }}>
              <TextInput
                placeholder="Search Drivers"
                value={searchQuery2}
@@ -454,6 +457,7 @@ const handleStartTrip = async (index, id) => {
                  margin: moderateScale(10),
                  padding: moderateScale(10),
                  borderRadius: moderateScale(10),
+                 
                }}
              />
          
@@ -498,10 +502,10 @@ const handleStartTrip = async (index, id) => {
          </Modal>           
  <View style={{flexDirection:'row', justifyContent:'space-between'}}>
     <View style={{ width: '49%' }}>
-             <Text style={{ fontWeight: '700', fontSize:  moderateScale(14) ,marginTop: hp('0.8%'), marginBottom:hp('0.5%') }}>Per Vehicle Rate <Text style={{ color: 'red' }}>*</Text></Text>
+             <Text style={{ fontWeight: '700', fontSize:  moderateScale(14) ,marginTop: hp('0.8%'), marginBottom:hp('0.5%'),color:'#f5fbfb' }}>Per Vehicle Rate <Text style={{ color: 'red' }}>*</Text></Text>
          
          <TextInput
-               style={{borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'),fontSize:moderateScale(12),backgroundColor:'lightgray',color:'black' }}
+               style={{borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'),fontSize:moderateScale(12),backgroundColor:'#00457c',color:'#fdfdfd' }}
                placeholder='Enter vehicle rate'
                keyboardType="numeric"
                editable={false}
@@ -509,10 +513,10 @@ const handleStartTrip = async (index, id) => {
              />
          </View>
          <View style={{ width: '49%' }}>
-             <Text style={{ fontWeight: '700', fontSize:  moderateScale(14),marginTop: hp('0.7%'), marginBottom:hp('0.5%')  }}>Avg. Percentages <Text style={{ color: 'red' }}>*</Text></Text>
+             <Text style={{ fontWeight: '700', fontSize:  moderateScale(14),marginTop: hp('0.7%'), marginBottom:hp('0.5%'), color:'#f5fbfb'  }}>Avg. Percentages <Text style={{ color: 'red' }}>*</Text></Text>
          
          <TextInput
-               style={{ borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'),fontSize:moderateScale(12) }}
+               style={{ borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'),fontSize:moderateScale(12),backgroundColor:'#00457c', color:'#fdfdfd' }}
                placeholder='Enter Percentages'
                keyboardType="numeric"
                value={advancePercentage}
@@ -523,10 +527,10 @@ const handleStartTrip = async (index, id) => {
 
 <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
   <View style={{width:'49%'}}>
-          <Text style={{ fontWeight: '700', fontSize:  moderateScale(14) ,marginTop: hp('0.3%'), marginBottom:hp('0.5%') }}>Adavance Amount<Text style={{ color: 'red' }}>*</Text></Text>
+          <Text style={{ fontWeight: '700', fontSize:  moderateScale(14) ,marginTop: hp('0.3%'), marginBottom:hp('0.5%'),color:'#f5fbfb' }}>Adavance Amount<Text style={{ color: 'red' }}>*</Text></Text>
          
          <TextInput
-               style={{ borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'), fontSize:moderateScale(12),backgroundColor:'lightgray',color:'black' }}
+               style={{ borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'), fontSize:moderateScale(12),backgroundColor:'#00457c',color:'#fdfdfd' }}
                placeholder='Enter per vehicle rate'
                keyboardType="numeric"
                value={advanceAmount}
@@ -536,10 +540,10 @@ const handleStartTrip = async (index, id) => {
 
 </View>
 <View style={{width:'49%'}}>
-            <Text style={{ fontWeight: '700', fontSize:  moderateScale(14),marginTop: hp('0.2%'), marginBottom:hp('0.5%')  }}>Balance Amount <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={{ fontWeight: '700', fontSize:  moderateScale(14),marginTop: hp('0.2%'), marginBottom:hp('0.5%'), color:'#f5fbfb'}}>Balance Amount <Text style={{ color: 'red' }}>*</Text></Text>
          
          <TextInput
-               style={{ borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'),fontSize:moderateScale(12),backgroundColor:'lightgray',color:'black'}}
+               style={{ borderWidth: wp('0.25%'),borderRadius: wp('1.25%'),height: hp('4.2%'),marginTop: hp('0.75%'),marginBottom: hp('1.5%'),paddingLeft: wp('2%'),fontSize:moderateScale(12),backgroundColor:'#00457c',color:'#fdfdfd'}}
                placeholder='Enter per vehicle rate'
                keyboardType="numeric"
                value={balanceAmount}
@@ -552,12 +556,13 @@ const handleStartTrip = async (index, id) => {
      </View>    
          
           <Pressable onPress={handleSubmit}>
-            <View style={{ backgroundColor: '#0b4b85', height: hp('4%'), borderRadius: wp('1.5%'), width: '40%', justifyContent: 'center', alignSelf: 'center' }}>
+            <View style={{ backgroundColor: '#001834', height: hp('4%'), borderRadius: wp('1.5%'), width: '40%', justifyContent: 'center', alignSelf: 'center', borderColor:'white', borderWidth:moderateScale(1) }}>
               <Text style={{ alignSelf: 'center', color: 'white', fontWeight: '600', fontSize: moderateScale(15) }}>Place Vehicle</Text>
             </View>
           </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
+    </ImageBackground>
   );
 }

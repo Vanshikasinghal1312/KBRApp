@@ -112,16 +112,16 @@ useFocusEffect(
                 </View> 
         {/* <Text style={{color:'navy',marginBottom: verticalScale(2),fontWeight: 'bold',fontSize: scale(20), textAlign:'center',textDecorationLine: 'underline'
   }}><Text style={{fontWeight: '800',fontSize:scale(20),color: 'navy'}}>{item.indent_number}</Text></Text> */}
-          <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.customer_name}</Text> </Text>
-        <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('1%')}}>Vehicle Type: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.Vehicle_type}</Text> </Text>
-             <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('1%')}}>Supplier Rate: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.rate}</Text> </Text>
+          <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.customer_name}</Text> </Text>
+        <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Vehicle Type: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.Vehicle_type}</Text> </Text>
+             <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Supplier Rate: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.rate}</Text> </Text>
 
         {/* <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Origin: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.origin}</Text></Text>
         <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Destination: <Text style={{fontWeight:'500',fontSize: scale(13),color: 'black',}}>{item.destination}</Text> </Text> */}
 
 <View style={{
         flexDirection: 'row',
-        marginTop: 10,
+        marginTop:hp('2%'),
         alignItems:'center'
       }}>
       
@@ -147,7 +147,7 @@ useFocusEffect(
              <View
           style={{
             flex: 1,
-            borderBottomWidth: 1,
+            borderBottomWidth: moderateScale(1),
             borderColor: 'white',
             borderStyle: 'dotted',
           }}
@@ -159,7 +159,7 @@ useFocusEffect(
           <View
           style={{
             flex: 1,
-            borderBottomWidth: 1,
+            borderBottomWidth:moderateScale(1),
             borderColor: 'white',
             borderStyle: 'dotted',
           }}
@@ -210,15 +210,15 @@ useFocusEffect(
       <Text style={{color: 'white',fontWeight: 'bold', fontSize: wp('3.2%')}}>Place Vehicle +</Text>
     </TouchableOpacity>
   ) : (
-    <Text style={{ marginTop: hp('2%'), fontWeight: 'bold', color: 'lightgreen',  marginLeft:wp('1%'), marginRight:wp('4%'), fontSize:moderateScale(14) }}>All Vehicle Placed</Text>
+    <Text style={{ marginTop: hp('2%'), fontWeight: 'bold', color: '#22ac46',  marginLeft:wp('1%'), marginRight:wp('4%'), fontSize:moderateScale(14) }}>All Vehicle Placed</Text>
   )
 }
 
       </View>
        {item.showDetails && (
           <View style={{marginTop: hp('1%'),}}>
-        <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Supplier Name: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}> {item.supplier_name}</Text></Text>
-        <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.vehicle_count}</Text> </Text>
+        <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Supplier Name: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}> {item.supplier_name}</Text></Text>
+        <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.vehicle_count}</Text> </Text>
        </View>
         )}
        
@@ -242,8 +242,8 @@ useFocusEffect(
             setFilteredData(data); 
           }}
           style={{
-          height: hp('1%'),  // Reduce height
-          color: 'white',      // Set selected text color
+          height: hp('1%'),  
+          color: 'white',      
           fontSize: wp('3.5%'),
         }}
   >
@@ -304,8 +304,13 @@ useFocusEffect(
       </View>
     </View>   
     {loading ? (
-        <ActivityIndicator size="large" color="green" />
-      ) : (
+        <ActivityIndicator size="large" color="#22ac46" />
+      ) : filteredData.length === 0 ? (
+        <View style={{ alignItems: 'center', marginTop: hp('15%') }}>
+          <Icon name="folder-open" size={wp('25%')} color="#999" />
+          <Text style={{color: 'white',fontSize: wp('5%'),fontWeight: 'bold',marginTop: hp('2%')}}>No Data Found</Text>
+        </View>
+      ):(
         <View>
         <FlatList
           data={filteredData}

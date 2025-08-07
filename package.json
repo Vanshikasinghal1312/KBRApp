@@ -23,6 +23,7 @@
     "react": "19.1.0",
     "react-freeze": "^1.0.4",
     "react-native": "0.80.1",
+    "react-native-chart-kit": "^6.11.0",
     "react-native-date-picker": "^5.0.13",
     "react-native-gesture-handler": "^2.27.2",
     "react-native-google-places-autocomplete": "^1.4.0",

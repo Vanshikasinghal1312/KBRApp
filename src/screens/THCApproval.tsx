@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, TextInput, TouchableOpacity, Dimensions, FlatList, ActivityIndicator, Alert, AppState} from 'react-native'
+import {View, Text, TextInput, TouchableOpacity, Dimensions, FlatList, ActivityIndicator, Alert, AppState,} from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('window');
@@ -152,11 +152,7 @@ const handleReject = (id) => {
 
    const renderIndentCard = ({ item }) => (  
     <View style={{ backgroundColor: '#06244F',borderRadius: wp('6%'),padding: wp('4%'),marginBottom: verticalScale(16),overflow:'hidden', marginRight: wp('1%'), marginLeft:hp('0.1%')}}>    
-      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>THC Date:<Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}> {item.thc_date}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Vehicel Number: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.vehicle_number}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Vendor Name: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.vendor_name}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Contract amount : <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.contract_amount}</Text> </Text>
-
+      
 <View style={{flexDirection: 'row',marginTop: hp('3%'),alignItems:'center'}}>
   <View style={{ flex:2, alignItems: 'flex-start' }}>
     {(() => {
@@ -217,6 +213,10 @@ const handleReject = (id) => {
   </View>
 
 </View>
+<Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>THC Date:<Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}> {item.thc_date}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Vehicel Number: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.vehicle_number}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Vendor Name: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.vendor_name}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),}}>Contract amount : <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.contract_amount}</Text> </Text>
 
      
      <View style={{flexDirection:'row', justifyContent:'space-between'}}>
@@ -230,7 +230,7 @@ const handleReject = (id) => {
         </TouchableOpacity>
   <TouchableOpacity
     onPress={() => HandleApprove(item.id)}
-    style={{backgroundColor: 'green',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('4%')}}>
+    style={{backgroundColor: '#22ac46',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('4%')}}>
     <Text style={{color: 'white',fontWeight: 'bold', fontSize: wp('3.2%')}}>Approve</Text>
   </TouchableOpacity>
 
@@ -325,7 +325,12 @@ const handleReject = (id) => {
     </View>   
     {loading ? (
         <ActivityIndicator size="large" color="green" />
-      ) : (
+      ) : filteredData.length === 0 ? (
+  <View style={{ alignItems: 'center', marginTop: hp('15%') }}>
+    <Icon name="folder-open" size={wp('25%')} color="#999" />
+    <Text style={{color: 'white',fontSize: wp('5%'),fontWeight: 'bold',marginTop: hp('2%')}}>No Data Found</Text>
+  </View>
+) : (
         <View>
         <FlatList
           data={filteredData}

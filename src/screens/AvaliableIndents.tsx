@@ -158,12 +158,12 @@ const renderIndentCard = ({ item }) => (
         }}>
           <Text style={{color:'#eec340',fontWeight: 'bold',fontSize: wp('5.5%'), marginLeft:wp('2%'),alignItems:'center',justifyContent:'center'}}><Text style={{fontWeight: 'bold',fontSize: wp('5.4%'), alignItems:'center',color:'#eec340',}}>{item.indent_number}</Text></Text>
           </View> 
-   <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name:  <Text style={{ color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),}}> {item.supplier_name}</Text></Text>
-        <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%')}}>Loading Date:  <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),}}>{item.loading_date}</Text> </Text>    
+   <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name:  <Text style={{ color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}> {item.supplier_name}</Text></Text>
+        <Text style={{color: '#fff',fontWeight: '600',fontSize: wp('3.8%')}}>Loading Date:  <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.loading_date}</Text> </Text>    
     
           <View style={{
         flexDirection: 'row',
-        marginTop: 10,
+        marginTop:hp('2%'),
         alignItems:'center'
       }}>
       
@@ -189,7 +189,7 @@ const renderIndentCard = ({ item }) => (
              <View
           style={{
             flex: 1,
-            borderBottomWidth: 1,
+            borderBottomWidth: moderateScale(1),
             borderColor: 'white',
             borderStyle: 'dotted',
           }}
@@ -201,7 +201,7 @@ const renderIndentCard = ({ item }) => (
           <View
           style={{
             flex: 1,
-            borderBottomWidth: 1,
+            borderBottomWidth:moderateScale(1),
             borderColor: 'white',
             borderStyle: 'dotted',
           }}
@@ -241,13 +241,13 @@ const renderIndentCard = ({ item }) => (
     </View>
      {item.showDetails && (
         <View style={{marginTop: hp('1%'),}}>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Start Date: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.indent_start_date}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Closing Date: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}> {item.indent_end_date}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.vehicle_type_name}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Costing Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.number_of_vehicles}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Remaining Vehicle/Tonn to Place: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.remaining_vehicle_count}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Target Rate: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.market_rate}</Text> </Text>   
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Start Date: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.indent_start_date}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Indent Closing Date: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}> {item.indent_end_date}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.vehicle_type_name}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Costing Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.costing_type === '1' ? 'Per Vehicle' : item.costing_type === '2' ? 'Per Tonn' : 'N/A'}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.number_of_vehicles}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Remaining Vehicle/Tonn to Place: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.remaining_vehicle_count}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Target Rate: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.market_rate}</Text> </Text>   
      </View>
       )}
      
@@ -396,7 +396,12 @@ const renderIndentCard = ({ item }) => (
     </View>   
     {loading ? (
         <ActivityIndicator size="large" color="green" />
-      ) : (
+      ) : filteredData.length === 0 ? (
+        <View style={{ alignItems: 'center', marginTop: hp('15%') }}>
+          <Icon name="folder-open" size={wp('25%')} color="#999" />
+          <Text style={{color: 'white',fontSize: wp('5%'),fontWeight: 'bold',marginTop: hp('2%')}}>No Data Found</Text>
+        </View>
+      ): (
         <View>
         <FlatList
           data={filteredData}
@@ -422,34 +427,41 @@ const renderIndentCard = ({ item }) => (
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 60, // modal starts near top
+    marginTop: hp('7%'), // modal starts near top
     backgroundColor: 'rgba(0,0,0,0.3)' // translucent background
   }}>
     <View style={{
       width: '90%',
       backgroundColor: '#151515',
-      borderRadius: 12,
-      padding: 20,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.3,
-      shadowRadius: 5,
-      elevation: 5
+      borderRadius: wp('3%'),
+      borderColor:'grey', 
+      // borderColor: 'white',
+borderWidth: 1,         // ~12px
+padding: wp('5%'),              // ~20px
+shadowColor: '#000',
+shadowOffset: {
+  width: 0,
+  height: hp('0.25%'),          // ~2px
+},
+shadowOpacity: 0.3,
+shadowRadius: wp('1.25%'),      // ~5px
+elevation: 5,
     }}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 15, color:'#ffffff' }}>
+      <Text style={{ fontSize: moderateScale(16), fontWeight: 'bold', marginBottom: hp('2%'), color:'#ffffff' }}>
         Add Broker Pricing - {selectedIndent?.indent_number}
       </Text>
 
-<View style={{borderWidth:1, borderColor:'darkgray', borderRadius:8, marginBottom:12, padding:hp('0.1%'),backgroundColor:'#313131'}}>
+<View style={{borderWidth: moderateScale(1), borderColor:'darkgray', borderRadius:moderateScale(8), marginBottom:hp('1%'),backgroundColor:'#313131'}}>
   <Picker
   selectedValue={brokerName}
   onValueChange={(item)=>setBrokerName(item)}
   dropdownIconColor='#989898'
   style={{
-            height: hp('5%'),  // Reduce height
-            color: '#989898',      // Set selected text color
+            height: hp('5%'),  
+            color: '#989898',      
             fontSize: wp('4.2%'),
             textAlign:'center',
+            alignItems:'center'
             
           }}
   >
@@ -473,7 +485,7 @@ const renderIndentCard = ({ item }) => (
             setCount(text);
           }}
           keyboardType="numeric"
-         style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding: hp('1%'),marginBottom: 12, backgroundColor:'#313131'}}
+         style={{borderWidth:moderateScale(1),borderColor: '#ccc',borderRadius:moderateScale(8),padding: hp('0.9%'),marginBottom:hp('0.8%'), backgroundColor:'#313131', color:'#989898'}}
          placeholderTextColor={'#989898'}
       />
       <TextInput
@@ -487,20 +499,19 @@ const renderIndentCard = ({ item }) => (
             setRate(text);
           }}        
         keyboardType="numeric"
-        style={{borderWidth: 1,borderColor: '#ccc',borderRadius: 8,padding:hp('1%'),marginBottom: 12, backgroundColor:'#313131'}}
+        style={{borderWidth:moderateScale(1),borderColor: '#ccc',borderRadius:moderateScale(8),padding:hp('1%'),marginBottom: hp('0.8%'), backgroundColor:'#313131',color:'#989898'}}
         placeholderTextColor={'#989898'}
         
         
 
       />
-
       {showError && (
-        <Text style={{ color: 'red', marginBottom: 10 }}>
+        <Text style={{ color: 'red', marginBottom: hp('2%') }}>
           ⚠️ Tonnage count cannot be less than required
         </Text>
       )}
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: hp('2%') }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: hp('1.5%') }}>
         <TouchableOpacity onPress={() => setModalVisible(false)}>
           <Text style={{ color: '#df4444', fontWeight: 'bold',fontSize:moderateScale(15)}}>Cancel</Text>
         </TouchableOpacity>

@@ -149,15 +149,15 @@ const handleReject = (id) => {
 </Text>
 </Text>
 </View>
-      <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name:<Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}> {item.customer_name}</Text></Text>
-          <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%')}}>Loading Date: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%')}}>{item.loading_date}</Text> </Text>         
+      <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%'),marginTop:hp('2%')}}>Customer Name:<Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}> {item.customer_name}</Text></Text>
+          <Text style={{ color: '#fff',fontWeight: '600',fontSize: wp('3.8%')}}>Loading Date: <Text style={{color: '#ccc',fontSize: wp('3.8%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.loading_date}</Text> </Text>         
 
       {/* <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Origin: <Text style={{fontWeight:'500',fontSize:scale(14),color: 'black',}}>{item.origin}</Text></Text> */}
       {/* <Text style={{fontWeight: 'bold',fontSize: scale(14),color: 'navy',}}>Destination: <Text style={{fontWeight:'500',fontSize: scale(14),color: 'black',}}>{item.destination}</Text> </Text> */}
 
         <View style={{
         flexDirection: 'row',
-        marginTop: 10,
+        marginTop: hp('2%'),
         alignItems:'center'
       }}>
       
@@ -183,7 +183,7 @@ const handleReject = (id) => {
              <View
           style={{
             flex: 1,
-            borderBottomWidth: 1,
+            borderBottomWidth:moderateScale(1),
             borderColor: 'white',
             borderStyle: 'dotted',
           }}
@@ -195,7 +195,7 @@ const handleReject = (id) => {
           <View
           style={{
             flex: 1,
-            borderBottomWidth: 1,
+            borderBottomWidth:moderateScale(1),
             borderColor: 'white',
             borderStyle: 'dotted',
           }}
@@ -224,19 +224,19 @@ const handleReject = (id) => {
       </View>
            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
 
-       <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{backgroundColor: '#eec340',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal: wp('4.5%'),marginTop:hp('2%'), marginRight:wp('1.5%')}}>
+       <TouchableOpacity onPress={() => toggleDetails(item.indent_number)} style={{backgroundColor: '#eec340',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal: wp('4.5%'),marginTop:hp('2%'), marginRight:wp('1.5%'), marginLeft:wp('3%')}}>
           <Text style={{color: 'black',fontWeight: 'bold', fontSize: wp('3.2%')}}>{item.showDetails ? 'View less' : 'View more'}</Text>
         </TouchableOpacity>
   <TouchableOpacity
     onPress={() => HandleApprove(item.id)}
-    style={{backgroundColor: '#90ee90',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('4%')}}>
+    style={{backgroundColor: '#22ac46',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('4%')}}>
   
-    <Text style={{color: 'black',fontWeight: 'bold', fontSize: wp('3.2%') }}>Approve</Text>
+    <Text style={{color: 'white',fontWeight: 'bold', fontSize: wp('3.2%') }}>Approve</Text>
   </TouchableOpacity>
 
   <TouchableOpacity
     onPress={() => handleReject(item.id)}
-    style={{backgroundColor: '#df4444',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('4%')}}>
+    style={{backgroundColor: '#df4444',borderRadius: wp('6%'),paddingVertical:hp('0.5%'),paddingHorizontal:wp('4.5%'), marginTop:hp('2%'), marginRight:wp('3%')}}>
   
     <Text style={{color: 'white',fontWeight: 'bold', fontSize: wp('3.2%') }}>Reject</Text>
   </TouchableOpacity>
@@ -245,11 +245,11 @@ const handleReject = (id) => {
     
      {item.showDetails && (
         <View style={{marginTop: 10,}}>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.Vehicle_type}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Broker Name: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.supplier_name}</Text></Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.vehicle_count}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Customer Rate: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.customer_rate}</Text> </Text>
-      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Total Rate(Broker): <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),}}>{item.broker_rate}</Text> </Text> 
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle Type: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.Vehicle_type}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Broker Name: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.supplier_name}</Text></Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Vehicle/Tonn Count: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.vehicle_count}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Customer Rate: <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.customer_rate}</Text> </Text>
+      <Text style={{color: '#fff',fontWeight: '500',fontSize: wp('3.6%')}}>Total Rate(Broker): <Text style={{color: '#ccc',fontSize: wp('3.6%'),marginBottom: hp('0.8%'),fontWeight:'400'}}>{item.broker_rate}</Text> </Text> 
      </View>
       )}
 
@@ -335,7 +335,12 @@ const handleReject = (id) => {
     </View>   
     {loading ? (
         <ActivityIndicator size="large" color="green" />
-      ) : (
+      ) : filteredData.length === 0 ? (
+        <View style={{ alignItems: 'center', marginTop: hp('15%') }}>
+          <Icon name="folder-open" size={wp('25%')} color="#999" />
+          <Text style={{color: 'white',fontSize: wp('5%'),fontWeight: 'bold',marginTop: hp('2%')}}>No Data Found</Text>
+        </View>
+      ): (
         <View>
         <FlatList
           data={filteredData}
